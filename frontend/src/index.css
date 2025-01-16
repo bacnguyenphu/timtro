@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.text-clamp {
+
+    display: -webkit-box; /* Sử dụng flexbox cho các trình duyệt hỗ trợ */
+  -webkit-line-clamp: 2; /* Giới hạn hiển thị tối đa 2 dòng */
+  -webkit-box-orient: vertical; /* Đặt hướng cho flexbox */
+  overflow: hidden; /* Ẩn phần văn bản vượt quá */
+  text-overflow: ellipsis; /* Thêm dấu ba chấm */
+  }
