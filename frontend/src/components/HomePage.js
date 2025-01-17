@@ -7,7 +7,7 @@ function HomePage() {
     const [posts, setPosts] = useState([])
     const[totalPages,setTotalPages] = useState(0)
     const[currentPage,setCurrentPage] = useState(1)
-    const limit = 10
+    const limit = 8
 
     useEffect(() => {
         fetchPosts()

@@ -1,3 +1,4 @@
+const { where } = require('sequelize');
 const db = require('../models/index')
 
 const getPosts = async () => {
@@ -27,9 +28,11 @@ const getPosts = async () => {
     }
 }
 
-const getPostsByPaginate = async (page, limit) => {
+const getPostsByPaginate = async (page, limit,category) => {
     try {
-
+        console.log('check categoryCode>>>',category);
+        let whereCondition = {}
+        
         if (!page && !limit) {
             return {
                 err: 1,
@@ -39,13 +42,20 @@ const getPostsByPaginate = async (page, limit) => {
             }
         }
 
+        if(category){
+            whereCondition.categoryCode = category
+        }
+
         const { count, rows } = await db.Post.findAndCountAll({
-            attributes: ['id', 'title', 'stars', 'address', 'description'],
+            attributes: ['id', 'title', 'stars', 'address', 'description','categoryCode'],
             include: [
                 { model: db.Attribute, as: 'attribute', attributes: ['price', 'acreage', 'published'], },
                 { model: db.Image, as: 'images', attributes: ['images'] },
                 { model: db.User, as: 'user', attributes: ['name', 'phone', 'avatar'] },
             ],
+            where:{
+                ...whereCondition
+            },
 
             offset: (page - 1) * limit,
             limit: limit,
@@ -61,7 +71,7 @@ const getPostsByPaginate = async (page, limit) => {
         }
 
     } catch (error) {
-        console.log("Lỗi ở getPost : ", error);
+        console.log("Lỗi ở getPostsByPaginate : ", error);
         return {
             err: -999,
             mess: "Error server!!",

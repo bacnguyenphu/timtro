@@ -1,6 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { getAllCategories } from "../services/apiCategory";
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { formatVietnameseToString } from "../utils/formatStringVN";
 import { HOMEPAGE } from "../utils/paths";
 import { useSelector,useDispatch } from "react-redux";
@@ -11,8 +10,9 @@ function Navigation() {
     const categories = useSelector((state) => state.category.categories)
     const dispatch = useDispatch()
 
-    console.log('check categories>>>',categories);
-    
+    useEffect(()=>{
+        dispatch(handleGetCategory())
+    },[])
 
     const classActive = 'text-red-primary after:absolute after:w-full after:h-[3px] after:bg-red-primary after:left-0 after:bottom-0 after:rounded-sm'
 

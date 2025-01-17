@@ -13,7 +13,7 @@ function App() {
           <Route path={RENTAL_APARTMENT} element={<RentalApartment />} />
           <Route path={RENTAL_HOUSE} element={<RentalHouse />} />
           <Route path={RENTAL_ROOM} element={<RentalRoom />} />
-          <Route path={RENTAL_SPACE} element={<RentalSpace />} />
+          <Route path={RENTAL_SPACE} element={<RentalSpace />}/>
           <Route path={LOGIN} element={<Login />} />
           <Route path={REGISTER} element={<Register />} />
         </Route>
