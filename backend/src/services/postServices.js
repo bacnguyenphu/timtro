@@ -1,4 +1,3 @@
-const { where } = require('sequelize');
 const db = require('../models/index')
 
 const getPosts = async () => {
@@ -28,11 +27,10 @@ const getPosts = async () => {
     }
 }
 
-const getPostsByPaginate = async (page, limit,category) => {
+const getPostsByPaginate = async (page, limit, category, price) => {
     try {
-        console.log('check categoryCode>>>',category);
         let whereCondition = {}
-        
+
         if (!page && !limit) {
             return {
                 err: 1,
@@ -42,18 +40,22 @@ const getPostsByPaginate = async (page, limit,category) => {
             }
         }
 
-        if(category){
+        if (category) {
             whereCondition.categoryCode = category
         }
 
+        if (price) {
+            whereCondition.priceCode = price
+        }
+
         const { count, rows } = await db.Post.findAndCountAll({
-            attributes: ['id', 'title', 'stars', 'address', 'description','categoryCode'],
+            attributes: ['id', 'title', 'stars', 'address', 'description', 'categoryCode', 'priceCode'],
             include: [
                 { model: db.Attribute, as: 'attribute', attributes: ['price', 'acreage', 'published'], },
                 { model: db.Image, as: 'images', attributes: ['images'] },
                 { model: db.User, as: 'user', attributes: ['name', 'phone', 'avatar'] },
             ],
-            where:{
+            where: {
                 ...whereCondition
             },
 
@@ -66,7 +68,7 @@ const getPostsByPaginate = async (page, limit,category) => {
             mess: "Get post succsesss!!",
             posts: rows,
             totalPosts: count,
-            totalPages:count/limit,
+            totalPages: Math.ceil(count / limit),
             currentPage: page
         }
 

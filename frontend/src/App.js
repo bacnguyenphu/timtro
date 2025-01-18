@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router";
-import { HOMEPAGE, LOGIN, REGISTER, RENTAL_APARTMENT, RENTAL_HOUSE, RENTAL_ROOM, RENTAL_SPACE } from "./utils/paths";
+import { HOMEPAGE, LOGIN, REGISTER } from "./utils/paths";
 import { LayoutDefault } from "./layouts";
-import { Login, HomePage, Register,RentalApartment, RentalHouse, RentalRoom, RentalSpace } from "./components";
+import { Login, HomePage, Register, ListFilter } from "./components";
 import { ToastContainer } from 'react-toastify';
 
 function App() {
@@ -10,10 +10,9 @@ function App() {
       <Routes>
         <Route path={HOMEPAGE} element={<LayoutDefault />}>
           <Route index element={<HomePage />} />
-          <Route path={RENTAL_APARTMENT} element={<RentalApartment />} />
-          <Route path={RENTAL_HOUSE} element={<RentalHouse />} />
-          <Route path={RENTAL_ROOM} element={<RentalRoom />} />
-          <Route path={RENTAL_SPACE} element={<RentalSpace />}/>
+          <Route path="/filter">
+            <Route path=":category" element={<ListFilter/>}/>
+          </Route>
           <Route path={LOGIN} element={<Login />} />
           <Route path={REGISTER} element={<Register />} />
         </Route>

@@ -1,6 +1,5 @@
 import { NavLink } from "react-router-dom";
 import { useEffect } from 'react'
-import { formatVietnameseToString } from "../utils/formatStringVN";
 import { HOMEPAGE } from "../utils/paths";
 import { useSelector,useDispatch } from "react-redux";
 import { handleGetCategory } from "../redux/categorySlice";
@@ -39,7 +38,7 @@ function Navigation() {
                                 <div key={category.code} className="relative">
                                     <li className="text-base py-3 hover:text-red-primary">
                                         <NavLink
-                                            to={formatVietnameseToString(category.value)}
+                                            to={`/filter/${category.code}`}
                                             className={({ isActive }) =>
                                                 isActive ? classActive : "text-black"
                                             }

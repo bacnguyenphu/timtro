@@ -1,6 +1,7 @@
 import List from "./List";
 import { useEffect, useState } from "react";
 import { getPostByPaginate } from "../services/apiPost";
+import { useSearchParams } from "react-router-dom";
 
 function HomePage() {
 
@@ -9,12 +10,14 @@ function HomePage() {
     const[currentPage,setCurrentPage] = useState(1)
     const limit = 8
 
+    const [searchParams] = useSearchParams();
+
     useEffect(() => {
         fetchPosts()
-    }, [currentPage])
+    }, [currentPage,searchParams.get("price")])
 
     const fetchPosts = async () => {
-        const res = await getPostByPaginate(currentPage,limit)
+        const res = await getPostByPaginate(currentPage,limit,undefined,searchParams.get("price"))
         if (res.err === 0) {
             setPosts(res.posts) 
             setTotalPages(res.totalPages)

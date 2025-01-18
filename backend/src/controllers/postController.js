@@ -14,8 +14,9 @@ const handleGetPostsByPaginate = async(req,res)=>{
         let page = req.query.page
         let limit = req.query.limit
         let category = req.query.category
+        let price = req.query.price
 
-        const messasge = await getPostsByPaginate(+page,+limit,category)
+        const messasge = await getPostsByPaginate(+page,+limit,category,price)
         return res.status(200).json(messasge)
     } catch (error) {
         console.log("Lỗi ở handleGetpostByPaginate",error);
