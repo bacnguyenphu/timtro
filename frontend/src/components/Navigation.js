@@ -7,6 +7,7 @@ import { handleGetCategory } from "../redux/categorySlice";
 function Navigation() {
 
     const categories = useSelector((state) => state.category.categories)
+    
     const dispatch = useDispatch()
 
     useEffect(()=>{

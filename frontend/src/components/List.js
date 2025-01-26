@@ -7,14 +7,28 @@ import { IoIosCamera } from "react-icons/io";
 import imageAvatarDefault from '../assets/images/user.png'
 import imageDefault from '../assets/images/imageDefault.svg'
 import ReactPaginate from 'react-paginate';
+import moment from 'moment';
+import 'moment/locale/vi';
+moment.locale('vi');
 
-function List({ posts,totalPages=10,currentPage=1,setCurrentPage }) {
+function List({ posts, totalPages = 10, currentPage = 1, setCurrentPage, isBtnDefault, setIsBtnDefault,
+    isBtnNewPost, setIsBtnNewPost }) {
     const [isLikePost, setIsLikePost] = useState(false);
 
     const handlePageClick = (event) => {
-        
+
         setCurrentPage(event.selected + 1)
     };
+
+    const handleClickBtnDefault = ()=>{
+        setIsBtnDefault(!isBtnDefault)
+        setIsBtnNewPost(!isBtnNewPost)
+    }
+
+    const handleClickBtnNewPost = ()=>{
+        setIsBtnDefault(!isBtnDefault)
+        setIsBtnNewPost(!isBtnNewPost)
+    }
 
     return (
         <div className="rounded-lg px-2 py-3 mt-10">
@@ -24,8 +38,16 @@ function List({ posts,totalPages=10,currentPage=1,setCurrentPage }) {
                 </h2>
                 <div className="flex gap-5 mt-4 items-center">
                     <p>Sắp xếp: </p>
-                    <button className="px-3 py-2 bg-gray-200 rounded-md">Mặc định</button>
-                    <button>Mới nhất</button>
+                    <button className={`px-3 py-2 ${isBtnDefault ? 'bg-gray-200' : ''} rounded-md`}
+                        onClick={() => { handleClickBtnDefault() }}
+                    >
+                        Mặc định
+                    </button>
+                    <button className={`px-3 py-2 ${isBtnNewPost ? 'bg-gray-200' : ''} rounded-md`}
+                        onClick={() => { handleClickBtnNewPost() }}
+                    >
+                        Mới nhất
+                    </button>
                 </div>
             </div>
             <hr className="my-4 border border-red-primary" />
@@ -107,7 +129,7 @@ function List({ posts,totalPages=10,currentPage=1,setCurrentPage }) {
                                             </div>
                                             <div>
                                                 <p className="cursor-pointer">{post?.user?.name}</p>
-                                                <p className="text-[12px] font-normal text-gray-400">{post?.attribute?.published}</p>
+                                                <p className="text-[12px] font-normal text-gray-400">{moment(post?.createdAt).fromNow()}</p>
                                             </div>
                                         </div>
                                         <div className="flex gap-4 items-center">

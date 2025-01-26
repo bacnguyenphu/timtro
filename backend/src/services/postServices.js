@@ -27,10 +27,14 @@ const getPosts = async () => {
     }
 }
 
-const getPostsByPaginate = async (page, limit, category, price) => {
+const getPostsByPaginate = async (page, limit, category, price, area,isNewPost) => {
     try {
         let whereCondition = {}
 
+        let test = false;
+
+        console.log('check isNewPost>>>', isNewPost);
+        
         if (!page && !limit) {
             return {
                 err: 1,
@@ -48,16 +52,25 @@ const getPostsByPaginate = async (page, limit, category, price) => {
             whereCondition.priceCode = price
         }
 
+        if (area) {
+            whereCondition.areaCode = area
+        }
+
         const { count, rows } = await db.Post.findAndCountAll({
-            attributes: ['id', 'title', 'stars', 'address', 'description', 'categoryCode', 'priceCode'],
+            attributes: ['id', 'title', 'stars', 'address', 'description', 'categoryCode', 'priceCode', 'areaCode','createdAt'],
             include: [
                 { model: db.Attribute, as: 'attribute', attributes: ['price', 'acreage', 'published'], },
                 { model: db.Image, as: 'images', attributes: ['images'] },
                 { model: db.User, as: 'user', attributes: ['name', 'phone', 'avatar'] },
+                // { model: db.Category, as: 'category' }
             ],
             where: {
                 ...whereCondition
             },
+
+            order: isNewPost ?  [
+                ['createdAt','DESC']
+            ] : null,
 
             offset: (page - 1) * limit,
             limit: limit,

@@ -20,7 +20,11 @@ export const login = createAsyncThunk("AuthenUser/login", async (payload) => {
             }
         }
         toast.success(res.mess)
-        return res
+        return {
+            isAuthenticate: true,
+            token: res.token,
+            name: res.name
+        }
     } catch (error) {
         console.log(error);
         return null
@@ -45,9 +49,10 @@ export const authSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(login.fulfilled, (state, action) => {
-                state.token = action.payload.token
-                state.name = action.payload.name
+                console.log('check ection>>>',action.payload);
                 state.isAuthenticate = action.payload.isAuthenticate
+                state.name = action.payload.name
+                state.token = action.payload.token                
             })
     }
 })

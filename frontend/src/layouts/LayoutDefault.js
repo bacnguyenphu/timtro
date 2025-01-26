@@ -1,10 +1,10 @@
 import { Outlet } from "react-router";
-import { Header, Navigation } from "../components";
+import { Footer, Header, Navigation } from "../components";
 import SideBar from "../components/SideBar";
 
 function LayoutDefault() {
     return (
-        <div className="bg-[#FDF5ED] min-h-screen">
+        <div className="bg-[#FDF5ED] min-h-screen pb-10">
             <div className=" px-[105px] bg-white">
                 <Header />
             </div>
@@ -20,6 +20,9 @@ function LayoutDefault() {
                         <SideBar/>
                     </div>
                 </div>
+            </div>
+            <div className="w-[1010px] mx-auto mt-10 rounded-xl">
+                <Footer/>
             </div>
         </div>
     );

@@ -3,6 +3,7 @@ import ItemSideBar from "./ItemSideBar";
 import { useEffect } from "react";
 import { handleGetPrice } from "../redux/priceSlice";
 import { handleGetArea } from "../redux/areaSlice";
+import NewPosts from "./NewPosts";
 
 function SideBar() {
 
@@ -26,6 +27,7 @@ function SideBar() {
             <ItemSideBar title={"Xem theo khoảng giá"} content={price}/>
             <ItemSideBar title={"Xem theo danh mục"} content={categories} isCate={true}/>
             <ItemSideBar title={"Xem theo diện tích"} content={area} isArea = {true}/>
+            <NewPosts/>
         </div>
      );
 }

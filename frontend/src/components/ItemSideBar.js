@@ -32,7 +32,7 @@ function ItemSideBar({ title, content, isCate,isArea }) {
                         content.map(item => {
                             return (
                                 <div key={item.code} className="flex text-sm items-center gap-1 cursor-pointer hover:text-red-primary"
-                                    onClick={() => { navigate(`${_.isEmpty(paramsURL) ? `?${isArea?'area':'price'}=${item?.code}` : `/filter/${paramsURL.category}?price=${item.code}`}`) }}
+                                    onClick={() => { navigate(`${_.isEmpty(paramsURL) ? `?${isArea?'area':'price'}=${item?.code}` : `/filter/${paramsURL.category}?${isArea?'area':'price'}=${item.code}`}`) }}
                                 >
                                     <span><FaAngleRight color="E41B23" /></span>
                                     <p>{item.value}</p>

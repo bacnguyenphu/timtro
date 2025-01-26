@@ -17,6 +17,7 @@ function Register() {
             return
         }
         toast.success(res.mess)
+        navigate('/login')
     }
 
     return (
