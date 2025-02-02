@@ -49,7 +49,7 @@ function Header() {
                     </button>
                 }
             </div>
-            {showModalFilterSearch&& <ModalFilterSearch/>}
+            {showModalFilterSearch&& <ModalFilterSearch setShowModalFilterSearch ={setShowModalFilterSearch}/>}
         </div>
     );
 }

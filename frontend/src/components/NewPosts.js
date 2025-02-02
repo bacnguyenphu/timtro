@@ -21,16 +21,13 @@ function NewPosts() {
         fetchNewPost()
     }, [])
 
-    console.log('check newPosts>>>', newPosts);
-
-
     return (
         <div className="bg-white rounded-lg pt-5 px-3">
             <h3 className="font-semibold">Tin mới đăng</h3>
             {newPosts && newPosts.length > 0 &&
                 newPosts.map((post, index) => {
                     return (
-                        <div className={`item-newPost flex h-[110px] py-3 gap-x-2 ${index + 1 === lenghtNewPosts ? '' : ' border-b'}`}>
+                        <div key={post?.id} className={`item-newPost flex h-[110px] py-3 gap-x-2 ${index + 1 === lenghtNewPosts ? '' : ' border-b'}`}>
                             <div className="w-1/3 rounded-md overflow-hidden">
                                 <img className="object-cover object-center size-full"
                                     alt={''}

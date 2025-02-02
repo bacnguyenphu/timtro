@@ -21,13 +21,13 @@ function List({ posts, totalPages = 10, currentPage = 1, setCurrentPage, isBtnDe
     };
 
     const handleClickBtnDefault = ()=>{
-        setIsBtnDefault(!isBtnDefault)
-        setIsBtnNewPost(!isBtnNewPost)
+        setIsBtnDefault(true)
+        setIsBtnNewPost(false)
     }
 
     const handleClickBtnNewPost = ()=>{
-        setIsBtnDefault(!isBtnDefault)
-        setIsBtnNewPost(!isBtnNewPost)
+        setIsBtnDefault(false)
+        setIsBtnNewPost(true)
     }
 
     return (

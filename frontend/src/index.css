@@ -10,3 +10,8 @@
   overflow: hidden; /* Ẩn phần văn bản vượt quá */
   text-overflow: ellipsis; /* Thêm dấu ba chấm */
   }
+
+.triangle-label{
+  border-bottom: 25px solid transparent;
+  border-right: 25px solid #E41B23;
+}

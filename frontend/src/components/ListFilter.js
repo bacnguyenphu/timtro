@@ -38,7 +38,7 @@ function ListFilter() {
 
     // Hàm này mình gọi post được filter, các giá trị được truyền vào hàm getPostByPaginate nếu rỗng thì không lọc
     const fetchPosts = async () => {
-        const res = await getPostByPaginate(currentPage, limit, param.category, searchParams.get("price"), searchParams.get("area"),isBtnNewPost?true:undefined)
+        const res = await getPostByPaginate(currentPage, limit, param.category, searchParams.get("price") === 'undefined' ? undefined : searchParams.get("price"), searchParams.get("area") === 'undefined' ? undefined : searchParams.get("area"),isBtnNewPost?true:undefined)
         if (res.err === 0) {
             setPosts(res.posts)
             setTotalPages(res.totalPages)

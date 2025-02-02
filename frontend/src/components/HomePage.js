@@ -34,7 +34,7 @@ function HomePage() {
     }, [currentPage, searchParams.get("price"), searchParams.get("area"), isBtnNewPost])
 
     const fetchPosts = async () => {
-        const res = await getPostByPaginate(currentPage, limit, undefined, searchParams.get("price"), searchParams.get("area"), isBtnNewPost ? true : undefined)
+        const res = await getPostByPaginate(currentPage, limit, undefined, searchParams.get("price") === 'undefined' ? undefined : searchParams.get("price"), searchParams.get("area") === 'undefined' ? undefined : searchParams.get("area"), isBtnNewPost ? true : undefined)
         if (res.err === 0) {
             setPosts(res.posts)
             setTotalPages(res.totalPages)
@@ -59,6 +59,9 @@ function HomePage() {
                     isBtnNewPost={isBtnNewPost} setIsBtnNewPost={setIsBtnNewPost}
                 />
             </div>
+            {posts && posts.length === 0 &&
+                <div>Không có kết quả</div>
+            }
         </div>
     );
 }
