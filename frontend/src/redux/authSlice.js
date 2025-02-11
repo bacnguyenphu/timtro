@@ -5,7 +5,9 @@ import { toast } from 'react-toastify'
 const initialState = {
     isAuthenticate: false,
     token: null,
-    name: ''
+    name: '',
+    phone:'',
+    avatar: null
 }
 
 export const login = createAsyncThunk("AuthenUser/login", async (payload) => {
@@ -23,7 +25,9 @@ export const login = createAsyncThunk("AuthenUser/login", async (payload) => {
         return {
             isAuthenticate: true,
             token: res.token,
-            name: res.name
+            name: res.name,
+            avatar: res.avatar,
+            phone: res.phone,
         }
     } catch (error) {
         console.log(error);
@@ -49,10 +53,11 @@ export const authSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(login.fulfilled, (state, action) => {
-                console.log('check ection>>>',action.payload);
+                console.log('check ection>>>', action.payload);
                 state.isAuthenticate = action.payload.isAuthenticate
                 state.name = action.payload.name
-                state.token = action.payload.token                
+                state.token = action.payload.token
+                state.phone = action.payload.phone
             })
     }
 })

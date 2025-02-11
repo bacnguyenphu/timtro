@@ -1,11 +1,13 @@
 import { FaAngleRight } from "react-icons/fa6";
 import { useNavigate, useParams } from "react-router-dom";
 import _ from 'lodash'
+import { useDispatch } from "react-redux";
+import { onChangCurrentPage } from "../redux/currentPageSlice";
 
-function ItemSideBar({ title, content, isCate,isArea }) {
+function ItemSideBar({ title, content, isCate, isArea }) {
 
     const navigate = useNavigate()
-
+    const dispatch = useDispatch()
     const paramsURL = useParams()
 
     return (
@@ -17,7 +19,10 @@ function ItemSideBar({ title, content, isCate,isArea }) {
                         content.map(item => {
                             return (
                                 <div key={item.code} className="flex text-sm items-center gap-1 cursor-pointer hover:text-red-primary"
-                                    onClick={() => { navigate(`/filter/${item.code}`) }}
+                                    onClick={() => {
+                                        navigate(`/filter/${item.code}`)
+                                        dispatch(onChangCurrentPage(1))
+                                    }}
                                 >
                                     <span><FaAngleRight color="E41B23" /></span>
                                     <p>{item.value}</p>
@@ -32,7 +37,10 @@ function ItemSideBar({ title, content, isCate,isArea }) {
                         content.map(item => {
                             return (
                                 <div key={item.code} className="flex text-sm items-center gap-1 cursor-pointer hover:text-red-primary"
-                                    onClick={() => { navigate(`${_.isEmpty(paramsURL) ? `?${isArea?'area':'price'}=${item?.code}` : `/filter/${paramsURL.category}?${isArea?'area':'price'}=${item.code}`}`) }}
+                                    onClick={() => {
+                                        navigate(`${_.isEmpty(paramsURL) ? `?${isArea ? 'area' : 'price'}=${item?.code}` : `/filter/${paramsURL.category}?${isArea ? 'area' : 'price'}=${item.code}`}`)
+                                        dispatch(onChangCurrentPage(1))
+                                    }}
                                 >
                                     <span><FaAngleRight color="E41B23" /></span>
                                     <p>{item.value}</p>

@@ -8,7 +8,7 @@ function ListFilter() {
 
     const [posts, setPosts] = useState([])
     const [totalPages, setTotalPages] = useState(0)
-    const [currentPage, setCurrentPage] = useState(1)
+    const currentPage = useSelector(state=>state.currentPage.currentPage)
     const limit = 8
 
     const [isBtnDefault,setIsBtnDefault] =  useState(true)
@@ -57,7 +57,6 @@ function ListFilter() {
             </div>
             <div>
                 <List posts={posts} totalPages={totalPages} 
-                currentPage={currentPage} setCurrentPage={setCurrentPage} 
                 isBtnDefault = {isBtnDefault} setIsBtnDefault ={setIsBtnDefault} 
                 isBtnNewPost = {isBtnNewPost} setIsBtnNewPost = {setIsBtnNewPost}
                 />

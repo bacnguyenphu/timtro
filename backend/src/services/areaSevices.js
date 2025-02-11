@@ -1,5 +1,3 @@
-const area = require('../models/area');
-const attribute = require('../models/attribute');
 const db = require('../models/index')
 
 const getArea = async () => {

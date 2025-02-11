@@ -1,8 +1,9 @@
 import { Routes, Route } from "react-router";
-import { HOMEPAGE, LOGIN, REGISTER } from "./utils/paths";
-import { LayoutDefault } from "./layouts";
+import { HOMEPAGE, LOGIN, REGISTER, USER_MANAGE_POSTS, USER_POST_NEW, USER_PROFILE } from "./utils/paths";
+import { LayoutDefault, LayoutUserManage } from "./layouts";
 import { Login, HomePage, Register, ListFilter } from "./components";
 import { ToastContainer } from 'react-toastify';
+import { ManageAccout, ManagePost, PostNew } from "./components/UserManage";
 
 function App() {
   return (
@@ -15,6 +16,11 @@ function App() {
           </Route>
           <Route path={LOGIN} element={<Login />} />
           <Route path={REGISTER} element={<Register />} />
+        </Route>
+        <Route path="/user" element={<LayoutUserManage/>}>
+          <Route path={USER_MANAGE_POSTS} element={<ManagePost/>}/>
+          <Route path={USER_POST_NEW} element={<PostNew/>}/>
+          <Route path={USER_PROFILE} element={<ManageAccout/>}/>
         </Route>
       </Routes>
       <ToastContainer

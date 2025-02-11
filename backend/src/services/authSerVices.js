@@ -66,13 +66,16 @@ const login = async (data) => {
 
         const token = createJWT({
             name: user.name,
-            phone: user.phone
+            phone: user.phone,
+            avatar: user.avatar
         })
 
         return {
             err: 0,
             mess: "Login success",
             name: user.name,
+            phone: user.phone,
+            avatar: user.avatar,
             token: token
         }
 

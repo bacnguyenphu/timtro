@@ -23,6 +23,10 @@ module.exports = {
       avatar: {
         type: Sequelize.BLOB('long')
       },
+      role:{
+        type:Sequelize.STRING,
+        defaultValue: "R1"
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

@@ -1,0 +1,6 @@
+export {default as Header} from './Header'
+export {default as SideBar} from './SideBar'
+export {default as ManagePost} from './ManagePost'
+export {default as ManageAccout} from './ManageAccout'
+export {default as PostNew} from './PostNew'
+export {default as HeaderTitle} from './HeaderTitle'

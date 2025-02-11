@@ -1,7 +1,8 @@
 export const HOMEPAGE = '/'
 export const LOGIN = '/login'
 export const REGISTER = '/register'
-export const RENTAL_APARTMENT = '/cho-thue-can-ho'
-export const RENTAL_HOUSE = '/nha-cho-thue'
-export const RENTAL_ROOM = '/cho-thue-phong-tro'
-export const RENTAL_SPACE = '/cho-thue-mat-bang'
+
+export const USER_MANAGE_POSTS = '/user/manage-posts'
+export const USER_PROFILE = '/user/manage-profile'
+export const USER_POST_NEW = '/user/post-new'
+

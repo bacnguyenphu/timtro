@@ -13,6 +13,7 @@ function Login() {
 
     const handleClickLogin = async() => {
         const payload = {phone,password}
+        navigate('/')
         dispatch(login(payload))
     }
 

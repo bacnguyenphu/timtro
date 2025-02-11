@@ -4,20 +4,27 @@ import { FaPhoneAlt } from "react-icons/fa";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { useState } from "react";
 import { IoIosCamera } from "react-icons/io";
+
 import imageAvatarDefault from '../assets/images/user.png'
 import imageDefault from '../assets/images/imageDefault.svg'
+
+import { useDispatch, useSelector } from "react-redux";
+import { onChangCurrentPage } from "../redux/currentPageSlice";
+
 import ReactPaginate from 'react-paginate';
 import moment from 'moment';
 import 'moment/locale/vi';
 moment.locale('vi');
 
-function List({ posts, totalPages = 10, currentPage = 1, setCurrentPage, isBtnDefault, setIsBtnDefault,
+
+function List({ posts, totalPages = 10, isBtnDefault, setIsBtnDefault,
     isBtnNewPost, setIsBtnNewPost }) {
     const [isLikePost, setIsLikePost] = useState(false);
 
-    const handlePageClick = (event) => {
+    const dispatch = useDispatch()
 
-        setCurrentPage(event.selected + 1)
+    const handlePageClick = (event) => {
+        dispatch(onChangCurrentPage(event.selected + 1))
     };
 
     const handleClickBtnDefault = ()=>{

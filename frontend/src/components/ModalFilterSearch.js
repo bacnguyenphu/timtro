@@ -4,8 +4,12 @@ import { PiBuildingApartmentLight, PiStorefrontLight } from "react-icons/pi";
 import { BsHouses } from "react-icons/bs";
 import { IoHomeOutline } from "react-icons/io5";
 import { IoCheckmark } from "react-icons/io5";
-import { useSelector } from "react-redux";
+
+import { useDispatch, useSelector } from "react-redux";
+import { onChangCurrentPage } from "../redux/currentPageSlice";
+
 import { useEffect, useState } from "react";
+
 import { useNavigate, useParams,useSearchParams } from "react-router-dom";
 import _ from 'lodash'
 
@@ -15,6 +19,7 @@ function ModalFilterSearch({ setShowModalFilterSearch }) {
     const [price, setPrice] = useState([])
     const [area, setArea] = useState([])
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const [filterType, setFilter] = useState({
         category: undefined,
@@ -159,12 +164,14 @@ function ModalFilterSearch({ setShowModalFilterSearch }) {
     }
 
     const handleClickApply = () => {
+        
         if (!filterType.category) {
-            if(!filterType.price&&!filterType.area){
-                return
-            }
-            navigate(`?price=${filterType.price}&area=${filterType.area}`)
+            // if(!filterType.price&&!filterType.area){
+            //     return
+            // }
+            navigate(`/?price=${filterType.price}&area=${filterType.area}`)
             setShowModalFilterSearch(false)
+            dispatch(onChangCurrentPage(1))
         }
         else{
             if(!filterType.price&&!filterType.area){
@@ -174,6 +181,7 @@ function ModalFilterSearch({ setShowModalFilterSearch }) {
             }
             navigate(`/filter/${filterType.category}?price=${filterType.price}&area=${filterType.area}`)
             setShowModalFilterSearch(false)
+            dispatch(onChangCurrentPage(1))
         }
     }
 

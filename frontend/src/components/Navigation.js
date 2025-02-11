@@ -1,18 +1,19 @@
 import { NavLink } from "react-router-dom";
 import { useEffect } from 'react'
 import { HOMEPAGE } from "../utils/paths";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { handleGetCategory } from "../redux/categorySlice";
+import { onChangCurrentPage } from "../redux/currentPageSlice";
 
 function Navigation() {
 
     const categories = useSelector((state) => state.category.categories)
-    
+
     const dispatch = useDispatch()
 
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(handleGetCategory())
-    },[])
+    }, [])
 
     const classActive = 'text-red-primary after:absolute after:w-full after:h-[3px] after:bg-red-primary after:left-0 after:bottom-0 after:rounded-sm'
 
@@ -21,7 +22,9 @@ function Navigation() {
             <div className="px-[255px]">
                 <ul className="flex gap-x-5">
                     <div className="relative">
-                        <li className="text-base py-3 hover:text-red-primary">
+                        <li className="text-base py-3 hover:text-red-primary"
+                            onClick={() => { dispatch(onChangCurrentPage(1)) }}
+                        >
                             <NavLink
                                 to={HOMEPAGE}
                                 className={({ isActive }) =>
@@ -37,7 +40,9 @@ function Navigation() {
                         categories.map(category => {
                             return (
                                 <div key={category.code} className="relative">
-                                    <li className="text-base py-3 hover:text-red-primary">
+                                    <li className="text-base py-3 hover:text-red-primary"
+                                        onClick={() => { dispatch(onChangCurrentPage(1)) }}
+                                    >
                                         <NavLink
                                             to={`/filter/${category.code}`}
                                             className={({ isActive }) =>

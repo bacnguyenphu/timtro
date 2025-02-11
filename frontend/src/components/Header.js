@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { CiCirclePlus } from "react-icons/ci";
+import { FaRegPenToSquare } from "react-icons/fa6";
 import { HiOutlineFilter } from "react-icons/hi";
 import { useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom'
 import ModalFilterSearch from "./ModalFilterSearch";
+import UserAccount from "./UserAccount";
 
 function Header() {
     const navigate = useNavigate()
@@ -31,9 +32,6 @@ function Header() {
             </div>
 
             <div className="flex items-center gap-2 text-white">
-                {userAuthen?.isAuthenticate &&
-                    <p className="text-black">Xin chào {userAuthen?.name}!</p>
-                }
                 {!userAuthen?.isAuthenticate &&
                     <button className="bg-blue-primary py-1 px-2 rounded" onClick={() => { navigate('/login') }}>Đăng nhập</button>
                 }
@@ -41,11 +39,14 @@ function Header() {
                     <button className="bg-blue-primary py-1 px-2 rounded" onClick={() => { navigate('/register') }}>Đăng Ký</button>
                 }
                 {userAuthen?.isAuthenticate &&
-                    <button className="flex items-center bg-red-primary py-1 px-2 rounded">
-                        <span>Đăng tin mới</span>
+                    <p className="text-black"><UserAccount/></p>
+                }
+                {userAuthen?.isAuthenticate &&
+                    <button className="flex items-center bg-red-primary py-1 px-2 rounded gap-2">
                         <span className="mt-1">
-                            <CiCirclePlus />
+                            <FaRegPenToSquare />
                         </span>
+                        <span>Đăng tin mới</span>
                     </button>
                 }
             </div>
