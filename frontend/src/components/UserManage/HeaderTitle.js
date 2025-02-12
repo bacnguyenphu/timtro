@@ -5,9 +5,9 @@ function HeaderTitle({title,navs}) {
             <p className="font-semibold text-2xl py-4">{title}</p>
             <ul className="flex gap-5">
                 {navs&&navs.length>0&&
-                navs.map(nav=>{
+                navs.map((nav,index)=>{
                     return(
-                        <li className={`pb-4 cursor-pointer hover:text-red-primary`}>
+                        <li key={`navssss-${index}`} className={`pb-4 cursor-pointer hover:text-red-primary`}>
                             {nav.title}
                         </li>
                     )

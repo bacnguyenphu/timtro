@@ -92,8 +92,8 @@ function UserAccount() {
                     <ul className="mt-5">
                         {navs.map((nav, index) => {
                             return (
-                                <Link to={nav.path}>
-                                    <li key={`nav-menu-${index}`} className="flex mt-3 gap-2 cursor-pointer">
+                                <Link to={nav.path} key={`nav-menu-${index}`}>
+                                    <li className="flex mt-3 gap-2 cursor-pointer">
                                         <span>{nav.icon}</span>
                                         <span>{nav.title}</span>
                                     </li>

@@ -60,8 +60,9 @@ function SideBar() {
                                 className={({ isActive }) =>
                                     isActive ? "font-bold" : ""
                                 }
+                                key={`nav-menu-${index}`}
                             >
-                                <li key={`nav-menu-${index}`} className="flex mt-4 gap-2 cursor-pointer items-center">
+                                <li className="flex mt-4 gap-2 cursor-pointer items-center">
                                     <span>{nav.icon}</span>
                                     <span>{nav.title}</span>
                                 </li>
