@@ -6,10 +6,12 @@ import { useNavigate } from 'react-router-dom'
 import ModalFilterSearch from "./ModalFilterSearch";
 import UserAccount from "./UserAccount";
 
+import { LOGIN, REGISTER, USER_POST_NEW } from "../utils/paths";
+
 function Header() {
     const navigate = useNavigate()
     const userAuthen = useSelector(state => state.authenUser)
-    const[showModalFilterSearch,setShowModalFilterSearch] = useState(false)
+    const [showModalFilterSearch, setShowModalFilterSearch] = useState(false)
 
     return (
         <div className="h-[65px] border-b-2 flex items-center justify-between">
@@ -24,25 +26,27 @@ function Header() {
                     </div>
                 </div>
                 <div className="flex items-center gap-x-2 rounded-full border py-2 px-3 text-sm cursor-pointer"
-                onClick={()=>{setShowModalFilterSearch(true)}}
+                    onClick={() => { setShowModalFilterSearch(true) }}
                 >
-                    <span className="mt-1"><HiOutlineFilter size={'1.25rem'}/></span>
+                    <span className="mt-1"><HiOutlineFilter size={'1.25rem'} /></span>
                     <p>Tìm kiếm theo bộ lọc</p>
                 </div>
             </div>
 
             <div className="flex items-center gap-2 text-white">
                 {!userAuthen?.isAuthenticate &&
-                    <button className="bg-blue-primary py-1 px-2 rounded" onClick={() => { navigate('/login') }}>Đăng nhập</button>
+                    <button className="bg-blue-primary py-1 px-2 rounded" onClick={() => { navigate(LOGIN) }}>Đăng nhập</button>
                 }
                 {!userAuthen?.isAuthenticate &&
-                    <button className="bg-blue-primary py-1 px-2 rounded" onClick={() => { navigate('/register') }}>Đăng Ký</button>
+                    <button className="bg-blue-primary py-1 px-2 rounded" onClick={() => { navigate(REGISTER) }}>Đăng Ký</button>
                 }
                 {userAuthen?.isAuthenticate &&
-                    <p className="text-black"><UserAccount/></p>
+                    <p className="text-black"><UserAccount /></p>
                 }
                 {userAuthen?.isAuthenticate &&
-                    <button className="flex items-center bg-red-primary py-1 px-2 rounded gap-2">
+                    <button className="flex items-center bg-red-primary py-1 px-2 rounded gap-2"
+                        onClick={() => { navigate(USER_POST_NEW) }}
+                    >
                         <span className="mt-1">
                             <FaRegPenToSquare />
                         </span>
@@ -50,7 +54,7 @@ function Header() {
                     </button>
                 }
             </div>
-            {showModalFilterSearch&& <ModalFilterSearch setShowModalFilterSearch ={setShowModalFilterSearch}/>}
+            {showModalFilterSearch && <ModalFilterSearch setShowModalFilterSearch={setShowModalFilterSearch} />}
         </div>
     );
 }

@@ -8,7 +8,7 @@ function Header() {
 
 
     return ( 
-        <div className="bg-[#003B95] flex items-center justify-between p-3">
+        <div className="bg-[#003B95] flex items-center justify-between p-3 w-full">
             <div className="cursor-pointer" onClick={()=>{navigate('/')}}>
                 <span><GoHome size={'2rem'} color="white"/></span>
             </div>
