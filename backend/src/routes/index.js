@@ -3,6 +3,7 @@ const category = require('./category')
 const post = require('./post')
 const price = require('./price')
 const area = require('./area')
+const address = require('./address')
 
 const insert = require('./insert')
 
@@ -16,6 +17,7 @@ const initRoutes = (app) => {
     app.use('/api', post)
     app.use('/api', price)
     app.use('/api', area)
+    app.use('/api',address)
 
     //insert data
     app.use('/api', insert)

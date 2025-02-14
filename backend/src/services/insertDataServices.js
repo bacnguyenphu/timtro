@@ -5,6 +5,9 @@ const chothuematbang = require('../../data/chothuematbang.json')
 const chothuecanho = require('../../data/chothuecanho.json')
 const nhachothue = require('../../data/nhachothue.json')
 const chothuephongtro = require('../../data/chothuephongtro.json')
+const wards = require('../../data/wards.json')
+const districs = require('../../data/districs.json')
+const provinces = require('../../data/provinces.json')
 const { generateCode } = require('../utils/generateCode ')
 const { getNumberFromString, getNumberFromStringV2 } = require('../utils/common')
 const { dataArea, dataPrice } = require('../utils/data')
@@ -140,4 +143,52 @@ const insertData = () => new Promise(async (resolve, reject) => {
     }
 })
 
-module.exports = { insertData }
+const inserAddress = async () => {
+    try {
+
+        for (const item of wards.data.data) {
+            await db.Ward.create({
+                id: item._id,
+                name: item.name,
+                type: item.type,
+                slug: item.slug,
+                name_with_type: item.name_with_type,
+                path: item.path,
+                path_with_type: item.path_with_type,
+                code: item.code,
+                parent_code: item.parent_code,
+            });
+        }
+
+        for (const item of districs.data.data) {
+            await db.Distric.create({
+                id: item._id,
+                name: item.name,
+                type: item.type,
+                slug: item.slug,
+                name_with_type: item.name_with_type,
+                path: item.path,
+                path_with_type: item.path_with_type,
+                code: item.code,
+                parent_code: item.parent_code,
+            });
+        }
+
+        for (const item of provinces.data.data) {
+            await db.Province.create({
+                id: item._id,
+                name: item.name,
+                type: item.type,
+                slug: item.slug,
+                name_with_type: item.name_with_type,
+                code: item.code,
+            });
+        }
+
+    } catch (error) {
+        console.log("Lỗi ở insertAđdress>>>", error);
+
+    }
+}
+
+module.exports = { insertData, inserAddress }

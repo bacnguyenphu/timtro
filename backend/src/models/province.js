@@ -15,8 +15,11 @@ module.exports = (sequelize, DataTypes) => {
         }
     }
     Province.init({
+        name: DataTypes.STRING,
+        type: DataTypes.STRING,
+        slug: DataTypes.STRING,
+        name_with_type: DataTypes.STRING,
         code: DataTypes.STRING,
-        value: DataTypes.STRING,
     }, {
         sequelize,
         modelName: 'Province',

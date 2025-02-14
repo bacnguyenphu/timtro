@@ -3,14 +3,12 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.addColumn('users', 'role', {
+    await queryInterface.addColumn('posts', 'wardCode', {
       type: Sequelize.STRING, // Kiểu dữ liệu
-      allowNull: false,       // Không cho phép null
-      defaultValue: 'R1'  // Giá trị mặc định
     });
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.removeColumn('users', 'User');
+    await queryInterface.removeColumn('posts', 'wardCode');
   }
 };

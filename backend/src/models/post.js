@@ -33,6 +33,7 @@ module.exports = (sequelize, DataTypes) => {
     provinceCode: DataTypes.STRING,
     priceNumber: DataTypes.FLOAT,
     areaNumber: DataTypes.FLOAT,
+    wardCode: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'Post',

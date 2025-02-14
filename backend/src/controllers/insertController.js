@@ -1,4 +1,4 @@
-const {insertData} = require('../services/insertDataServices')
+const {insertData,inserAddress} = require('../services/insertDataServices')
 
 const handleInsertdata =async(req,res)=>{
     try {
@@ -13,4 +13,15 @@ const handleInsertdata =async(req,res)=>{
     }
 }
 
-module.exports = {handleInsertdata}
+const handleInsertAddressTable = async(req,res)=>{
+    try {
+        const message = await inserAddress()
+        return res.status(200).json({
+            mess:"Insert success address"
+        })
+    } catch (error) {
+        console.log("Lỗi ở handleInsertAddressTable:  ", error);
+    }
+}
+
+module.exports = {handleInsertdata,handleInsertAddressTable}

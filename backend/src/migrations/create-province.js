@@ -5,13 +5,21 @@ module.exports = {
             id: {
                 allowNull: false,
                 primaryKey: true,
-                type: Sequelize.INTEGER,
-                autoIncrement: true
-            },
-            code: {
                 type: Sequelize.STRING
             },
-            value: {
+            name: {
+                type: Sequelize.STRING
+            },
+            type: {
+                type: Sequelize.STRING
+            },
+            slug: {
+                type: Sequelize.STRING
+            },
+            name_with_type: {
+                type: Sequelize.STRING
+            },
+            code: {
                 type: Sequelize.STRING
             },
             createdAt: {
