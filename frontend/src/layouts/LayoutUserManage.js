@@ -4,10 +4,10 @@ import { Header, SideBar } from "../components/UserManage";
 function LayoutUserManage() {
     return (
         <div className="h-screen flex flex-col">
-            <div className="fixed w-full">
+            <div className="fixed w-full z-50">
                 <Header />
             </div>
-            <div className="flex flex-grow mt-16">
+            <div className="flex flex-grow mt-14">
                 <div className="w-1/6 h-full border-r bg-white">
                     <div className="fixed">
                         <SideBar />

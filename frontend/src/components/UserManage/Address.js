@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import  {useEffect, useState,memo } from "react";
 import { getDictricsByProvincesPl, getProvincesAllPl, getWardsByDictricsPl } from "../../services/apiPublicProvincesVN";
 
-function Address() {
+function Address({ward,setWard,address,setAddress}) {
 
     const [provincesList, setProvincesList] = useState([])
     const [province, setProvince] = useState({
@@ -16,21 +16,11 @@ function Address() {
         path_with_type: ''
     })
     const [wards, setWards] = useState([])
-    const [ward, setWard] = useState({
-        name: '',
-        code: null,
-        path_with_type: ''
-    })
-
-    const [address, setAddress] = useState({
-        detail: '',
-        path_with_type: ''
-    })
 
     useEffect(() => {
         const fetchAddress = async () => {
             const res = await getProvincesAllPl()
-            setProvincesList(res.data.data.data)
+            setProvincesList(res.data)
         }
         fetchAddress()
     }, [])
@@ -39,7 +29,7 @@ function Address() {
         if (province?.code !== '' && province.code !== null) {
             const fetchDictrics = async () => {
                 const res = await getDictricsByProvincesPl(province.code)
-                setDistricts(res.data.data.data)
+                setDistricts(res.data)
             }
             fetchDictrics()
         }
@@ -50,8 +40,7 @@ function Address() {
         if (district?.code !== '' && district.code !== null) {
             const fetchWards = async () => {
                 const res = await getWardsByDictricsPl(district.code)
-                console.log('check wards>>>', res);
-                setWards(res.data.data.data)
+                setWards(res.data)
             }
             fetchWards()
         }
@@ -73,7 +62,6 @@ function Address() {
                                 code: e.target.value,
                                 path_with_type: e.target.options[e.target.selectedIndex].getAttribute('data-path')
                             })
-                            console.log(e.target.options[e.target.selectedIndex].getAttribute('data-path'));
                             setAddress({ ...address, path_with_type: e.target.options[e.target.selectedIndex].getAttribute('data-path') })
                         }}
                     >
@@ -148,11 +136,13 @@ function Address() {
 
                 <div className="w-[92%] flex flex-col">
                     <label htmlFor="provinces">Địa chỉ:</label>
+                    
                     <input className="border p-1 rounded" value={`${address.detail}${address.detail===''?'':', '}${address.path_with_type}`} disabled />
                 </div>
             </div>
+            
         </div>
     );
 }
 
-export default Address;
+export default memo(Address);

@@ -69,7 +69,7 @@ function UserAccount() {
                 <span><FaCaretDown /></span>
             </div>
             {showModal &&
-                <div className="w-[250px] rounded-xl absolute right-0 bg-white border shadow-[0px_8px_10px_-2px_rgba(0,_0,_0,_0.4)] z-50 p-5 text-black">
+                <div className="w-[250px] rounded-xl absolute right-0 bg-white border shadow-[0px_8px_10px_-2px_rgba(0,_0,_0,_0.4)] z-[100] p-5 text-black">
                     <div className="flex gap-4 cursor-pointer"
                     onClick={()=>{navigate(USER_PROFILE)}}
                     >

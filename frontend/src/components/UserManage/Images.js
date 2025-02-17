@@ -1,18 +1,22 @@
 import { FcOldTimeCamera } from "react-icons/fc";
 import { CiTrash } from "react-icons/ci";
-import { memo } from "react";
+import { memo, useState } from "react";
 
 function Images({ images, setImages }) {
 
+    const[imagesPreview,setImagesPreview] = useState([])
+
     const handleUploadImages = (e) => {
         const files = e.target.files
+        setImages([...files])
         for (const file of files) {
-            setImages(images => [...images, URL.createObjectURL(file)])
+            setImagesPreview(images => [...images, URL.createObjectURL(file)])
         }
     }
 
     const handleRemoveImg =(index)=>{
-        setImages((prev) => prev.filter((_, i) => i !== index));
+        setImagesPreview((prev) => prev.filter((_, i) => i !== index));
+        setImages((prev) => prev.filter((_, i) => i !== index))
     }
 
     return (
@@ -28,8 +32,8 @@ function Images({ images, setImages }) {
                 <input id="uploadImages" hidden type="file" multiple onChange={handleUploadImages} />
             </div>
             <div className="mt-5 flex flex-wrap gap-4">
-                {images.length > 0 &&
-                    images.map((image, index) => {
+                {imagesPreview.length > 0 &&
+                    imagesPreview.map((image, index) => {
                         return(
                             <div key={`imageMnU--${index}`} className="w-[172px] h-[125px] shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] rounded-md overflow-hidden">
                                 <div className="w-full h-[100px]">

@@ -1,6 +1,7 @@
-import { useSelector } from "react-redux";
+import { useSelector } from "react-redux"
+import { memo } from "react";
 
-function OverView() {
+function OverView({setCateCode}) {
 
     const categories = useSelector(state => state.category.categories)
 
@@ -62,4 +63,4 @@ function OverView() {
     );
 }
 
-export default OverView;
+export default memo(OverView);

@@ -40,7 +40,7 @@ const register = async (data) => {
 
 const login = async (data) => {
     try {
-        if(!data.phone&&!data.password){
+        if (!data.phone && !data.password) {
             return {
                 err: 3,
                 mess: "Params is required"
@@ -65,6 +65,7 @@ const login = async (data) => {
         }
 
         const token = createJWT({
+            id: user.id,
             name: user.name,
             phone: user.phone,
             avatar: user.avatar
@@ -73,6 +74,7 @@ const login = async (data) => {
         return {
             err: 0,
             mess: "Login success",
+            id: user.id,
             name: user.name,
             phone: user.phone,
             avatar: user.avatar,

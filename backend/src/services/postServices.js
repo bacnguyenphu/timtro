@@ -96,4 +96,8 @@ const getPostsByPaginate = async (page, limit, category, price, area,isNewPost) 
     }
 }
 
+const createPost = async(data)=>{
+    
+}
+
 module.exports = { getPosts, getPostsByPaginate }

@@ -1,15 +1,17 @@
-import axios from 'axios';
+import axios from "../utils/customAxios";
 
 const getProvincesAllPl = ()=>{
-    return axios.get('https://vn-public-apis.fpo.vn/provinces/getAll?limit=-1')
+    return axios.get('getProvincesAll')
 }
 
 const getDictricsByProvincesPl =(code)=>{
-    return axios.get(`https://vn-public-apis.fpo.vn/districts/getByProvince?provinceCode=${code}&limit=-1`)
+    return axios.get(`getDistrics-by-province?code=${code}`)
 }
 
 const getWardsByDictricsPl = (code)=>{
-    return axios.get(`https://vn-public-apis.fpo.vn/wards/getByDistrict?districtCode=${code}&limit=-1`)
+    return axios.get(`getWards-by-distric?code=${code}`)
 }
+
+
 
 export {getProvincesAllPl,getDictricsByProvincesPl,getWardsByDictricsPl}

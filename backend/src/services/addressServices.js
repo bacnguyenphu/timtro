@@ -1,74 +1,74 @@
 const { where } = require('sequelize');
 const db = require('../models/index')
 
-const getProvinces = async()=>{
+const getProvinces = async () => {
     try {
         const provinces = await db.Province.findAll({
             attributes: ['name', 'type', 'slug', 'name_with_type', 'code'],
         })
 
-        return{
+        return {
             err: 0,
             mess: "get provinces succsess",
-            provinces
+            data: provinces
         }
-        
+
     } catch (error) {
-        console.log('Lỗi ở getProvinces; ',error);
-        return{
+        console.log('Lỗi ở getProvinces; ', error);
+        return {
             err: -999,
             mess: "Error server",
-            provinces:[]
+            data: []
         }
     }
 }
 
-const getDistricsByProvince = async(code)=>{
+const getDistricsByProvince = async (code) => {
     try {
 
         const districs = await db.Distric.findAll({
             // attributes: ['name', 'type', 'slug', 'name_with_type', 'code'],
-            where:{parent_code:code}
+            where: { parent_code: code }
         })
 
-        return{
+        return {
             err: 0,
             mess: "get districs succsess",
-            districs
+            data: districs
         }
-        
+
     } catch (error) {
-        console.log('Lỗi ở getDistricsByProvince; ',error);
-        return{
+        console.log('Lỗi ở getDistricsByProvince; ', error);
+        return {
             err: -999,
             mess: "Error server",
-            districs:[]
+            data: []
         }
     }
 }
 
-const getWardsByDistric = async(code)=>{
+const getWardsByDistric = async (code) => {
     try {
 
         const wards = await db.Ward.findAll({
             // attributes: ['name', 'type', 'slug', 'name_with_type', 'code'],
-            where:{parent_code:code}
+            where: { parent_code: code }
         })
 
-        return{
+        return {
             err: 0,
             mess: "get wards succsess",
-            wards
+            data: wards
         }
-        
+
     } catch (error) {
-        console.log('Lỗi ở getWardsByDistric; ',error);
-        return{
+        console.log('Lỗi ở getWardsByDistric; ', error);
+        return {
             err: -999,
             mess: "Error server",
-            wards:[]
+            data: []
         }
     }
 }
 
-module.exports = { getProvinces,getDistricsByProvince,getWardsByDistric }
+module.exports = { getProvinces, getDistricsByProvince, getWardsByDistric }
