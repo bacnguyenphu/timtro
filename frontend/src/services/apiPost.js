@@ -8,4 +8,8 @@ const getPostByPaginate = (page,limit,category,price,area,isNewPost)=>{
     return axios.get('getPostByPaginate',{ params: { page,limit,category,price,area,isNewPost}})
 }
 
-export {getPost,getPostByPaginate}
+const createNewPost = data=>{
+    return axios.post('createNewPost',data)
+}
+
+export {getPost,getPostByPaginate,createNewPost}

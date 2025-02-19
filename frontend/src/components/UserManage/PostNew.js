@@ -1,18 +1,20 @@
 import Address from "./Address";
 import OverView from "./OverView";
 import HeaderTitle from "./HeaderTitle";
-import { useState,  } from "react";
+import { useState, } from "react";
 import Images from "./Images";
 import InforContact from "./InforContact";
 import { uploadImgCloudinary } from "../../services/apiUploadImgCloudinary";
 import { useSelector } from "react-redux";
+import _ from 'lodash'
 
 import ClipLoader from "react-spinners/ClipLoader";
+import { createNewPost } from "../../services/apiPost";
 
 function PostNew() {
 
     const user = useSelector(state => state.authenUser)
-    const[isLoaded,setIsLoaded] = useState(false)
+    const [isLoaded, setIsLoaded] = useState(false)
     const navs = [
         {
             title: "Khu vực",
@@ -32,75 +34,82 @@ function PostNew() {
         },
     ]
 
-    const [ward, setWard] = useState({
-        name: '',
-        code: null,
-        path_with_type: ''
-    })
-
-    const [address, setAddress] = useState({
-        detail: '',
-        path_with_type: ''
-    })
-    const[categoryCode,setCategoryCode]  = useState()
     const [images, setImages] = useState([]) // imagé này dùng để đẩy lên cloudinary rồi lấy link ảnh
 
     const [payload, setPayload] = useState({
         title: '',
         address: '',
         price: '',
-        acrage: "",
+        acreage: "",
         categoryCode: '',
-        decription: '',
+        description: '',
         idUser: user.id,
         images: '',
         priceCode: '',
         areaCode: '',
-
+        wardCode: ''
     })
 
     const handleClickSubmit = async () => {
         setIsLoaded(true)
-        await handleGetLinkImgs()
-        console.log('check payload>>>', payload);
+
+        const res = await createNewPost(await handleGetLinkImgs())
+        console.log('check res>>>', res);
+
         setIsLoaded(false)
 
     }
 
     const handleGetLinkImgs = async () => {
         let imgsTemp = []
-        let formData = new FormData()
         for (let i of images) {
+            let formData = new FormData()
             formData.append("file", i)
             formData.append("upload_preset", "timtro-zhnwbawr")
             const res = await uploadImgCloudinary(formData)
 
             if (res.status === 200) {
-                console.log('check url>>>', res.data.url);
                 imgsTemp = [...imgsTemp, `${res.data.url}`]
-
             }
         }
-        setPayload(payload => ({ ...payload, images: [...imgsTemp] }))
 
+        let imgString = JSON.stringify([...imgsTemp])
+
+        let newData = _.cloneDeep(payload)
+        newData = { ...newData, images: imgString }
+        return newData
     }
+
+    // console.log('check payload>>>>', payload);
+    const scrollToSection = (id) => {
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    };
 
     return (
         <div className="">
             <div className="fixed w-full">
-                <HeaderTitle title={'Đăng tin cho thuê'} navs={navs} />
+                <HeaderTitle title={'Đăng tin cho thuê'} navs={navs} scrollToSection={scrollToSection} />
             </div>
             <div className="pt-28 flex flex-col items-center gap-5">
-                <Address ward={ward} setWard={setWard} address={address} setAddress={setAddress} />
-                <OverView />
-                <Images images={images} setImages={setImages} />
-                <InforContact />
+                <div id="khuvuc" className="scroll-mt-96">
+                    <Address payload={payload} setPayload={setPayload} />
+                </div>
+                <div id="thongtinmota" className="scroll-mt-44">
+                    <OverView payload={payload} setPayload={setPayload} />
+                </div>
+                <div id="hinhanh" className="scroll-mt-44">
+                    <Images images={images} setImages={setImages} />
+                </div>
+                <div id="thongtinlienhe" className="scroll-mt-44">
+                    <InforContact />
+                </div>
+
             </div>
             <button className="w-[780px] mt-8 flex items-center justify-center bg-red-primary mx-auto py-4 text-white rounded-lg"
                 onClick={() => { handleClickSubmit() }}
             >
-                {!isLoaded&&<span>Hoàn tất</span>}
-                {isLoaded&&<ClipLoader color="#FFFFFF"/>}
+                {!isLoaded && <span>Hoàn tất</span>}
+                {isLoaded && <ClipLoader color="#FFFFFF" />}
             </button>
         </div>
     );

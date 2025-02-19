@@ -1,4 +1,4 @@
-const {getPosts, getPostsByPaginate} = require('../services/postServices')
+const {getPosts, getPostsByPaginate,createNewPost} = require('../services/postServices')
 
 const handleGetposts = async(req,res)=>{
     try {
@@ -25,4 +25,16 @@ const handleGetPostsByPaginate = async(req,res)=>{
     }
 }
 
-module.exports = {handleGetposts,handleGetPostsByPaginate}
+const handleCreateNewPost = async(req,res)=>{
+    try {
+        let data = req.body
+        const messasge = await createNewPost(data)
+        console.log('check data>>',data);
+        
+        return res.status(200).json(messasge)
+    } catch (error) {
+        console.log("Lỗi ở handleCreateNewPost",error);
+    }
+}
+
+module.exports = {handleGetposts,handleGetPostsByPaginate,handleCreateNewPost}

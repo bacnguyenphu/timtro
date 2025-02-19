@@ -1,4 +1,5 @@
 const db = require('../models/index')
+const { v4: uuidv4 } = require('uuid');
 
 const getPosts = async () => {
     try {
@@ -27,14 +28,14 @@ const getPosts = async () => {
     }
 }
 
-const getPostsByPaginate = async (page, limit, category, price, area,isNewPost) => {
+const getPostsByPaginate = async (page, limit, category, price, area, isNewPost) => {
     try {
         let whereCondition = {}
 
         let test = false;
 
         console.log('check isNewPost>>>', isNewPost);
-        
+
         if (!page && !limit) {
             return {
                 err: 1,
@@ -57,7 +58,7 @@ const getPostsByPaginate = async (page, limit, category, price, area,isNewPost) 
         }
 
         const { count, rows } = await db.Post.findAndCountAll({
-            attributes: ['id', 'title', 'stars', 'address', 'description', 'categoryCode', 'priceCode', 'areaCode','createdAt'],
+            attributes: ['id', 'title', 'stars', 'address', 'description', 'categoryCode', 'priceCode', 'areaCode', 'createdAt'],
             include: [
                 { model: db.Attribute, as: 'attribute', attributes: ['price', 'acreage', 'published'], },
                 { model: db.Image, as: 'images', attributes: ['images'] },
@@ -68,8 +69,8 @@ const getPostsByPaginate = async (page, limit, category, price, area,isNewPost) 
                 ...whereCondition
             },
 
-            order: isNewPost ?  [
-                ['createdAt','DESC']
+            order: isNewPost ? [
+                ['createdAt', 'DESC']
             ] : null,
 
             offset: (page - 1) * limit,
@@ -96,8 +97,59 @@ const getPostsByPaginate = async (page, limit, category, price, area,isNewPost) 
     }
 }
 
-const createPost = async(data)=>{
-    
+const createNewPost = async (data) => {
+    const iditifyPrice = (value) => {
+        let price = +value / 1000000.0
+        if (price < 1) {
+            return `${+value / 1000} nghìn/tháng`
+        }
+        else {
+            return `${(+value / 1000000.0).toFixed(1)} triệu/tháng`
+        }
+    }
+    try {
+        const idPost = uuidv4()
+        const attributesId = uuidv4()
+        const imagesId = uuidv4()
+        await db.Post.create({
+            id: idPost,
+            title: data?.title,
+            address: data?.address,
+            attributesId: attributesId,
+            categoryCode: data?.categoryCode,
+            description: data?.description,
+            userId: data?.idUser,
+            imagesId: imagesId,
+            priceCode: data?.priceCode,
+            areaCode: data?.areaCode,
+            priceNumber: data?.price,
+            areaNumber: data?.acreage,
+            wardCode: data?.wardCode
+        })
+
+        await db.Attribute.create({
+            id: attributesId,
+            price: iditifyPrice(data?.price),
+            acreage: `${data?.acreage}m2`
+        })
+
+        await db.Image.create({
+            id: imagesId,
+            images: data?.images
+        })
+
+        return {
+            err: 0,
+            mess: "Post success !",
+        }
+
+    } catch (error) {
+        console.log("Lỗi ở createNewPost : ", error);
+        return {
+            err: -999,
+            mess: "Error server!!",
+        }
+    }
 }
 
-module.exports = { getPosts, getPostsByPaginate }
+module.exports = { getPosts, getPostsByPaginate, createNewPost }

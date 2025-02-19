@@ -8,7 +8,7 @@ import { IoIosCamera } from "react-icons/io";
 import imageAvatarDefault from '../assets/images/user.png'
 import imageDefault from '../assets/images/imageDefault.svg'
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch} from "react-redux";
 import { onChangCurrentPage } from "../redux/currentPageSlice";
 
 import ReactPaginate from 'react-paginate';
@@ -119,7 +119,7 @@ function List({ posts, totalPages = 10, isBtnDefault, setIsBtnDefault,
                                     </div>
 
                                     <p className="text-sm font-normal text-gray-400 line-clamp-2 mt-4">
-                                        {JSON.parse(post?.description)}
+                                        {post?.description}
                                     </p>
 
                                     <div className="flex justify-between mt-4 items-center">

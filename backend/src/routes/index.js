@@ -7,9 +7,6 @@ const address = require('./address')
 
 const insert = require('./insert')
 
-const express = require('express')
-const router = express.Router()
-
 const initRoutes = (app) => {
 
     app.use('/api', auth)

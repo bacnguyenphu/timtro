@@ -1,9 +1,21 @@
-import  {useEffect, useState,memo } from "react";
+import { useEffect, useState, memo, useRef } from "react";
 import { getDictricsByProvincesPl, getProvincesAllPl, getWardsByDictricsPl } from "../../services/apiPublicProvincesVN";
 
-function Address({ward,setWard,address,setAddress}) {
+function Address({ payload, setPayload }) {
+
+    const refAddress = useRef()
 
     const [provincesList, setProvincesList] = useState([])
+    const [ward, setWard] = useState({
+        name: '',
+        code: null,
+        path_with_type: ''
+    })
+
+    const [address, setAddress] = useState({
+        detail: '',
+        path_with_type: ''
+    })
     const [province, setProvince] = useState({
         name: '',
         code: null,
@@ -114,6 +126,7 @@ function Address({ward,setWard,address,setAddress}) {
                                 path_with_type: e.target.options[e.target.selectedIndex].getAttribute('data-path')
                             })
                             setAddress({ ...address, path_with_type: e.target.options[e.target.selectedIndex].getAttribute('data-path') })
+                            setPayload({ ...payload, wardCode: e.target.value })
                         }}
                     >
                         <option selected value="">--Chọn Phường/Xã--</option>
@@ -129,18 +142,23 @@ function Address({ward,setWard,address,setAddress}) {
 
                 <div className="w-[45%] flex flex-col">
                     <label htmlFor="provinces">Chi tiết:</label>
-                    <input className="border p-1 rounded" onBlur={(e) => {
-                        setAddress({ ...address, detail: `${e.target.value}` })
-                    }} />
+                    <input className="border p-1 rounded"
+                        onBlur={(e) => {
+                            // setAddress(address=>({ ...address, detail: `${e.target.value}` }))
+                            setAddress({ ...address, detail: `${e.target.value}` })
+                            setPayload(payload=>({ ...payload, address: `${e.target.value}${e.target.value === '' ? '' : ', '}${address.path_with_type}` }))
+                        }}
+                    />
                 </div>
 
                 <div className="w-[92%] flex flex-col">
                     <label htmlFor="provinces">Địa chỉ:</label>
-                    
-                    <input className="border p-1 rounded" value={`${address.detail}${address.detail===''?'':', '}${address.path_with_type}`} disabled />
+
+                    <input ref={refAddress} className="border p-1 rounded" value={`${address.detail}${address.detail === '' ? '' : ', '}${address.path_with_type}`} disabled
+                    />
                 </div>
             </div>
-            
+
         </div>
     );
 }
