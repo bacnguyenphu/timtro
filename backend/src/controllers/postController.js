@@ -1,4 +1,4 @@
-const {getPosts, getPostsByPaginate,createNewPost} = require('../services/postServices')
+const {getPosts, getPostsByPaginate,createNewPost, getPostsByIDUser} = require('../services/postServices')
 
 const handleGetposts = async(req,res)=>{
     try {
@@ -17,7 +17,6 @@ const handleGetPostsByPaginate = async(req,res)=>{
         let price = req.query.price
         let area = req.query.area
         let isNewPost = req.query.isNewPost
-
         const messasge = await getPostsByPaginate(+page,+limit,category,price,area,isNewPost)
         return res.status(200).json(messasge)
     } catch (error) {
@@ -37,4 +36,17 @@ const handleCreateNewPost = async(req,res)=>{
     }
 }
 
-module.exports = {handleGetposts,handleGetPostsByPaginate,handleCreateNewPost}
+const handleGetPostByIDUser = async(req,res)=>{
+    try {
+        let page = req.query.page
+        let limit = req.query.limit
+        let idUser = req.query.idUser
+        const messasge = await getPostsByIDUser(+page,+limit,idUser)
+
+        return res.status(200).json(messasge)
+    } catch (error) {
+        console.log("Lỗi ở handleCreateNewPost",error);
+    }
+}
+
+module.exports = {handleGetposts,handleGetPostsByPaginate,handleCreateNewPost,handleGetPostByIDUser}

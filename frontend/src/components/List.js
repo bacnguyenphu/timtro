@@ -161,7 +161,7 @@ function List({ posts, totalPages = 10, isBtnDefault, setIsBtnDefault,
                 <ReactPaginate
                     onPageChange={handlePageClick}
                     pageRangeDisplayed={5}
-                    pageCount={totalPages}
+                    pageCount={10}
                     nextLabel=">"
                     previousLabel="<"
                     previousLinkClassName="block px-3 py-2 border border-gray-300 rounded hover:bg-blue-primary"

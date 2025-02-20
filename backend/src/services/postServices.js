@@ -1,3 +1,4 @@
+const { Where } = require('sequelize/lib/utils');
 const db = require('../models/index')
 const { v4: uuidv4 } = require('uuid');
 
@@ -31,8 +32,6 @@ const getPosts = async () => {
 const getPostsByPaginate = async (page, limit, category, price, area, isNewPost) => {
     try {
         let whereCondition = {}
-
-        let test = false;
 
         console.log('check isNewPost>>>', isNewPost);
 
@@ -104,9 +103,15 @@ const createNewPost = async (data) => {
             return `${+value / 1000} nghìn/tháng`
         }
         else {
-            return `${(+value / 1000000.0).toFixed(1)} triệu/tháng`
+            return `${formatNumber(+value / 1000000.0)} triệu/tháng`
         }
     }
+
+    const formatNumber=(num)=> {
+        const fixedNum = num.toFixed(1); // Giữ 1 số sau dấu phẩy
+        return fixedNum.endsWith(".0") ? Math.floor(num) : parseFloat(fixedNum);
+    }
+
     try {
         const idPost = uuidv4()
         const attributesId = uuidv4()
@@ -152,4 +157,48 @@ const createNewPost = async (data) => {
     }
 }
 
-module.exports = { getPosts, getPostsByPaginate, createNewPost }
+const getPostsByIDUser = async(page,limit,idUser)=>{
+    try {
+        const { count, rows } = await db.Post.findAndCountAll({
+            attributes: ['id', 'title', 'stars', 'address', 'description', 'categoryCode', 'priceCode', 'areaCode', 'createdAt'],
+            include: [
+                { model: db.Attribute, as: 'attribute', attributes: ['price', 'acreage', 'published'], },
+                { model: db.Image, as: 'images', attributes: ['images'] },
+                { model: db.User, as: 'user', attributes: ['name', 'phone', 'avatar'] },
+                // { model: db.Category, as: 'category' }
+            ],
+            where: {
+                userId : idUser
+            },
+
+            // order: isNewPost ? [
+            //     ['createdAt', 'DESC']
+            // ] : null,
+
+            offset: (page - 1) * limit,
+            limit: limit,
+        })
+
+        return{
+            err:0,
+            mess:"Get post by iduser success!",
+            posts : rows,
+            totalPosts: count,
+            totalPages: Math.ceil(count / limit),
+            currentPage: page
+        }
+
+    } catch (error) {
+        console.log("Lỗi ở getPostByIDUser: ", error);
+        return{
+            err:-999,
+            mess:"Error Server!",
+            posts:[],
+            totalPosts: 0,
+            totalPages: 0,
+            currentPage: page
+        }
+    }
+}
+
+module.exports = { getPosts, getPostsByPaginate, createNewPost,getPostsByIDUser }

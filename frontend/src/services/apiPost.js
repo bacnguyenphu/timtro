@@ -12,4 +12,8 @@ const createNewPost = data=>{
     return axios.post('createNewPost',data)
 }
 
-export {getPost,getPostByPaginate,createNewPost}
+const getPostsByIDUser = (page,limit,idUser)=>{
+    return axios.get('get-post-by-idUser',{ params: { page,limit,idUser}})
+}
+
+export {getPost,getPostByPaginate,createNewPost,getPostsByIDUser}

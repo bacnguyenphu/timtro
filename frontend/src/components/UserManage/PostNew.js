@@ -7,6 +7,7 @@ import InforContact from "./InforContact";
 import { uploadImgCloudinary } from "../../services/apiUploadImgCloudinary";
 import { useSelector } from "react-redux";
 import _ from 'lodash'
+import { toast } from 'react-toastify'
 
 import ClipLoader from "react-spinners/ClipLoader";
 import { createNewPost } from "../../services/apiPost";
@@ -54,8 +55,10 @@ function PostNew() {
         setIsLoaded(true)
 
         const res = await createNewPost(await handleGetLinkImgs())
-        console.log('check res>>>', res);
-
+        // console.log('check res>>>', res);
+        if(res.err ===0){
+            toast.success("Post success!")
+        }
         setIsLoaded(false)
 
     }
