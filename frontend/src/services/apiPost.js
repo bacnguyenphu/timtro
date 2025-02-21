@@ -16,4 +16,8 @@ const getPostsByIDUser = (page,limit,idUser)=>{
     return axios.get('get-post-by-idUser',{ params: { page,limit,idUser}})
 }
 
-export {getPost,getPostByPaginate,createNewPost,getPostsByIDUser}
+const deletePostByID = (idPost)=>{
+    return axios.delete('delete-post-by-id',{params:{idPost}})
+}
+
+export {getPost,getPostByPaginate,createNewPost,getPostsByIDUser,deletePostByID}

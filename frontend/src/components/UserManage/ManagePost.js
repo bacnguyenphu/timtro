@@ -8,6 +8,7 @@ import moment from 'moment';
 import 'moment/locale/vi';
 import { useSelector } from "react-redux";
 import Modal from "./Modal";
+import { useLocation, useNavigate } from "react-router-dom";
 moment.locale('vi');
 
 function ManagePost() {
@@ -19,11 +20,15 @@ function ManagePost() {
         },
 
     ]
+
+    const location = useLocation()
+    const navigate = useNavigate()
+
     const user = useSelector(state => state.authenUser)
     const idUser = user.id
     const limit = 10
-    const[isShowModal,setIsShowModal] = useState(false)
-    const[isDeletePost,setIsDeletePost] = useState(false)
+    const [isShowModal, setIsShowModal] = useState(false)
+    const [isDeletePost, setIsDeletePost] = useState(false)
 
     const [posts, setPosts] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
@@ -47,9 +52,18 @@ function ManagePost() {
         setCurrentPage(event.selected + 1)
     };
 
-    const handleClickBtnDelete = ()=>{
+    const handleClickBtnDelete = (idPost) => {
         setIsShowModal(true)
         setIsDeletePost(true)
+
+        const currentParams = new URLSearchParams(location.search);
+        currentParams.set("id", idPost); // Thêm hoặc cập nhật param        
+        navigate(`${location.pathname}?${currentParams.toString()}`, { replace: true });
+    }
+
+    const handleClickBtnUpdate = ()=>{
+        setIsShowModal(true)
+        setIsDeletePost(false)
     }
 
     // console.log('check post>>', posts);
@@ -93,7 +107,7 @@ function ManagePost() {
                                             posts.map((post, index) => {
                                                 return (
                                                     <tr key={`tr-${post.id}`} className="bg-gray-100 border-b">
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{(currentPage - 1) * limit + index+1}</td>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{(currentPage - 1) * limit + index + 1}</td>
                                                         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-normal line-clamp-2">
                                                             {post.title}
                                                         </td>
@@ -111,12 +125,17 @@ function ManagePost() {
                                                         </td>
                                                         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                                             <div classNameName="flex gap-3">
-                                                                <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Sửa</button>
+                                                                <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                                                                onClick={()=>{handleClickBtnUpdate()}}
+                                                                >
+                                                                    Sửa
+                                                                </button>
+
                                                                 <button type="button" className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                                                                onClick={()=>{handleClickBtnDelete()}}
+                                                                    onClick={() => { handleClickBtnDelete(post.id) }}
                                                                 >
                                                                     Xóa
-                                                                    </button>
+                                                                </button>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -152,7 +171,9 @@ function ManagePost() {
                     renderOnZeroPageCount={null}
                 />
             </div>
-            {isShowModal&&<Modal setIsShowModal={setIsShowModal} isDeletePost={isDeletePost}/>}
+            {isShowModal && <Modal setIsShowModal={setIsShowModal} isDeletePost={isDeletePost}
+                fetchPosts={fetchPosts}
+            />}
         </div>
     );
 }

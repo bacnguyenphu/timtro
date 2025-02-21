@@ -1,4 +1,3 @@
-const { Where } = require('sequelize/lib/utils');
 const db = require('../models/index')
 const { v4: uuidv4 } = require('uuid');
 
@@ -61,7 +60,7 @@ const getPostsByPaginate = async (page, limit, category, price, area, isNewPost)
             include: [
                 { model: db.Attribute, as: 'attribute', attributes: ['price', 'acreage', 'published'], },
                 { model: db.Image, as: 'images', attributes: ['images'] },
-                { model: db.User, as: 'user', attributes: ['name', 'phone', 'avatar'] },
+                { model: db.User, as: 'user', attributes: ['name', 'phone', 'avatar',] },
                 // { model: db.Category, as: 'category' }
             ],
             where: {
@@ -96,6 +95,40 @@ const getPostsByPaginate = async (page, limit, category, price, area, isNewPost)
     }
 }
 
+const getPostByID = async (idPost) => {
+    try {
+        const post = await db.Post.findOne({
+            where: { id: idPost },
+            // attributes: ['id', 'title', 'stars', 'address', 'description'],
+            include: [
+                { model: db.Attribute, as: 'attribute', attributes: ['price', 'acreage', 'published','id'], },
+                { model: db.Image, as: 'images', attributes: ['images','id'] },
+                { model: db.User, as: 'user', attributes: ['name', 'phone', 'avatar'] },
+            ],
+        })
+
+        if (post === null) {
+            return {
+                err: 1,
+                mess: "Post do not exist"
+            }
+        }
+
+        return {
+            err: 0,
+            mess: "Get post is successful !",
+            post
+        }
+
+    } catch (error) {
+        console.log('Lỗi ở deletePostByID: ', error);
+        return {
+            err: -999,
+            mess: "Error Server!"
+        }
+    }
+}
+
 const createNewPost = async (data) => {
     const iditifyPrice = (value) => {
         let price = +value / 1000000.0
@@ -107,7 +140,7 @@ const createNewPost = async (data) => {
         }
     }
 
-    const formatNumber=(num)=> {
+    const formatNumber = (num) => {
         const fixedNum = num.toFixed(1); // Giữ 1 số sau dấu phẩy
         return fixedNum.endsWith(".0") ? Math.floor(num) : parseFloat(fixedNum);
     }
@@ -157,7 +190,7 @@ const createNewPost = async (data) => {
     }
 }
 
-const getPostsByIDUser = async(page,limit,idUser)=>{
+const getPostsByIDUser = async (page, limit, idUser) => {
     try {
         const { count, rows } = await db.Post.findAndCountAll({
             attributes: ['id', 'title', 'stars', 'address', 'description', 'categoryCode', 'priceCode', 'areaCode', 'createdAt'],
@@ -168,7 +201,7 @@ const getPostsByIDUser = async(page,limit,idUser)=>{
                 // { model: db.Category, as: 'category' }
             ],
             where: {
-                userId : idUser
+                userId: idUser
             },
 
             // order: isNewPost ? [
@@ -179,10 +212,10 @@ const getPostsByIDUser = async(page,limit,idUser)=>{
             limit: limit,
         })
 
-        return{
-            err:0,
-            mess:"Get post by iduser success!",
-            posts : rows,
+        return {
+            err: 0,
+            mess: "Get post by iduser success!",
+            posts: rows,
             totalPosts: count,
             totalPages: Math.ceil(count / limit),
             currentPage: page
@@ -190,10 +223,10 @@ const getPostsByIDUser = async(page,limit,idUser)=>{
 
     } catch (error) {
         console.log("Lỗi ở getPostByIDUser: ", error);
-        return{
-            err:-999,
-            mess:"Error Server!",
-            posts:[],
+        return {
+            err: -999,
+            mess: "Error Server!",
+            posts: [],
             totalPosts: 0,
             totalPages: 0,
             currentPage: page
@@ -201,4 +234,104 @@ const getPostsByIDUser = async(page,limit,idUser)=>{
     }
 }
 
-module.exports = { getPosts, getPostsByPaginate, createNewPost,getPostsByIDUser }
+const deletePostByID = async (idPost) => {
+    try {
+        const post = await db.Post.findOne({
+            where: { id: idPost },
+            attributes: ['id'],
+            include: [
+                { model: db.Attribute, as: 'attribute', attributes: ['id'], },
+                { model: db.Image, as: 'images', attributes: ['id'] },
+            ],
+        })
+
+        if (post === null) {
+            return {
+                err: 1,
+                mess: "Post do not exist"
+            }
+        }
+
+        await db.Post.destroy({
+            where: {
+                id: idPost
+            },
+        });
+
+        await db.Attribute.destroy({
+            where: {
+                id: post.attribute.id
+            },
+        });
+
+        await db.Image.destroy({
+            where: {
+                id: post.images.id
+            },
+        });
+
+        return {
+            err: 0,
+            mess: "Delete is success !"
+        }
+
+    } catch (error) {
+        console.log('Lỗi ở deletePostByID: ', error);
+        return {
+            err: -999,
+            mess: "Error Server!"
+        }
+    }
+}
+
+const updatePostByID = async (idPost) => {
+    try {
+        const post = await db.Post.findOne({
+            where: { id: idPost },
+            attributes: ['id'],
+            include: [
+                { model: db.Attribute, as: 'attribute', attributes: ['id'], },
+                { model: db.Image, as: 'images', attributes: ['id'] },
+            ],
+        })
+
+        if (post === null) {
+            return {
+                err: 1,
+                mess: "Post do not exist"
+            }
+        }
+
+        // await db.Post.destroy({
+        //     where: {
+        //         id: idPost
+        //     },
+        // });
+
+        // await db.Attribute.destroy({
+        //     where: {
+        //         id: post.attribute.id
+        //     },
+        // });
+
+        // await db.Image.destroy({
+        //     where: {
+        //         id: post.images.id
+        //     },
+        // });
+
+        return {
+            err: 0,
+            mess: "Delete is success !"
+        }
+
+    } catch (error) {
+        console.log('Lỗi ở deletePostByID: ', error);
+        return {
+            err: -999,
+            mess: "Error Server!"
+        }
+    }
+}
+
+module.exports = { getPosts, getPostsByPaginate, createNewPost, getPostsByIDUser, deletePostByID, updatePostByID, getPostByID }

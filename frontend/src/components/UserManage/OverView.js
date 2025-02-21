@@ -91,6 +91,7 @@ function OverView({ payload, setPayload }) {
                     <span className="text-red-primary"> (*)</span>
                 </label>
                 <input className="border rounded p-2" maxLength={100}
+                    value={payload.title}
                     onChange={(e) => { setPayload({ ...payload, title: e.target.value }) }}
                 />
                 <small className="text-gray-400">(Tối thiểu 30 ký tự, tối đa 100 ký tự)</small>
@@ -100,6 +101,7 @@ function OverView({ payload, setPayload }) {
                     <span className="text-red-primary"> (*)</span>
                 </label>
                 <textarea className="h-60 border rounded p-2" maxLength={5000}
+                    value={payload.description}
                     onChange={(e) => { setPayload({ ...payload, description: e.target.value }) }}
                 />
                 <small className="text-gray-400">(Tối thiểu 50 ký tự, tối đa 5000 ký tự)</small>
@@ -110,6 +112,7 @@ function OverView({ payload, setPayload }) {
                 </label>
                 <div className="border rounded w-[60%] flex">
                     <input className="rounded p-2 outline-none border w-4/6"
+                        value={payload.price}
                         onChange={e => handleOnchangePriceAndAcreage(e, "PRICE")}
                     />
                     <span className="w-2/6 flex items-center justify-center">đồng/tháng</span>
@@ -122,6 +125,7 @@ function OverView({ payload, setPayload }) {
                 </label>
                 <div className="border rounded w-[60%] flex">
                     <input className="rounded p-2 outline-none border w-4/6" maxLength={10}
+                        value={payload.acreage}
                         onChange={e => handleOnchangePriceAndAcreage(e, "ACREAGE")}
                     />
                     <span className="w-2/6 flex items-center justify-center">m&sup2;
