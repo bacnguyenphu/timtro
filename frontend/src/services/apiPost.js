@@ -4,6 +4,10 @@ const getPost = ()=>{
     return axios.get('getPosts')
 }
 
+const getPostByID = (idPost)=>{
+    return axios.get('get-post-by-id',{params:{idPost}})
+}
+
 const getPostByPaginate = (page,limit,category,price,area,isNewPost)=>{
     return axios.get('getPostByPaginate',{ params: { page,limit,category,price,area,isNewPost}})
 }
@@ -20,4 +24,4 @@ const deletePostByID = (idPost)=>{
     return axios.delete('delete-post-by-id',{params:{idPost}})
 }
 
-export {getPost,getPostByPaginate,createNewPost,getPostsByIDUser,deletePostByID}
+export {getPost,getPostByPaginate,createNewPost,getPostsByIDUser,deletePostByID,getPostByID}

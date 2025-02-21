@@ -72,6 +72,7 @@ function OverView({ payload, setPayload }) {
                     <span className="text-red-primary"> (*)</span>
                 </label>
                 <select className="border p-1 rounded mt-1" name="category" id="category"
+                    value={payload.categoryCode}
                     onChange={(e) => { setPayload({ ...payload, categoryCode: e.target.value }) }}
                 >
                     <option selected value='' data-path=''>--Chon loại chuyên mục--</option>

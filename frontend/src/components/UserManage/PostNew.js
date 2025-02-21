@@ -36,6 +36,7 @@ function PostNew() {
     ]
 
     const [images, setImages] = useState([]) // imagé này dùng để đẩy lên cloudinary rồi lấy link ảnh
+    const[imagesPreview,setImagesPreview] = useState([])
 
     const [payload, setPayload] = useState({
         title: '',
@@ -101,7 +102,7 @@ function PostNew() {
                     <OverView payload={payload} setPayload={setPayload} />
                 </div>
                 <div id="hinhanh" className="scroll-mt-44">
-                    <Images images={images} setImages={setImages} />
+                    <Images images={images} setImages={setImages} imagesPreview={imagesPreview} setImagesPreview={setImagesPreview} />
                 </div>
                 <div id="thongtinlienhe" className="scroll-mt-44">
                     <InforContact />

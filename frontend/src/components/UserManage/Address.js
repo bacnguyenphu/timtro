@@ -146,7 +146,7 @@ function Address({ payload, setPayload }) {
                         onBlur={(e) => {
                             // setAddress(address=>({ ...address, detail: `${e.target.value}` }))
                             setAddress({ ...address, detail: `${e.target.value}` })
-                            setPayload(payload=>({ ...payload, address: `${e.target.value}${e.target.value === '' ? '' : ', '}${address.path_with_type}` }))
+                            setPayload(payload => ({ ...payload, address: `${e.target.value}${e.target.value === '' ? '' : ', '}${address.path_with_type}` }))
                         }}
                     />
                 </div>
@@ -154,7 +154,9 @@ function Address({ payload, setPayload }) {
                 <div className="w-[92%] flex flex-col">
                     <label htmlFor="provinces">Địa chỉ:</label>
 
-                    <input ref={refAddress} className="border p-1 rounded" value={`${address.detail}${address.detail === '' ? '' : ', '}${address.path_with_type}`} disabled
+                    <input ref={refAddress} className="border p-1 rounded"
+                        value={payload.address}
+                        disabled
                     />
                 </div>
             </div>

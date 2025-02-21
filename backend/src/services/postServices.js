@@ -1,6 +1,21 @@
 const db = require('../models/index')
 const { v4: uuidv4 } = require('uuid');
 
+const iditifyPrice = (value) => {
+    let price = +value / 1000000.0
+    if (price < 1) {
+        return `${+value / 1000} nghìn/tháng`
+    }
+    else {
+        return `${formatNumber(+value / 1000000.0)} triệu/tháng`
+    }
+}
+
+const formatNumber = (num) => {
+    const fixedNum = num.toFixed(1); // Giữ 1 số sau dấu phẩy
+    return fixedNum.endsWith(".0") ? Math.floor(num) : parseFloat(fixedNum);
+}
+
 const getPosts = async () => {
     try {
         const posts = await db.Post.findAll({
@@ -121,7 +136,7 @@ const getPostByID = async (idPost) => {
         }
 
     } catch (error) {
-        console.log('Lỗi ở deletePostByID: ', error);
+        console.log('Lỗi ở getPostByID: ', error);
         return {
             err: -999,
             mess: "Error Server!"
@@ -130,21 +145,6 @@ const getPostByID = async (idPost) => {
 }
 
 const createNewPost = async (data) => {
-    const iditifyPrice = (value) => {
-        let price = +value / 1000000.0
-        if (price < 1) {
-            return `${+value / 1000} nghìn/tháng`
-        }
-        else {
-            return `${formatNumber(+value / 1000000.0)} triệu/tháng`
-        }
-    }
-
-    const formatNumber = (num) => {
-        const fixedNum = num.toFixed(1); // Giữ 1 số sau dấu phẩy
-        return fixedNum.endsWith(".0") ? Math.floor(num) : parseFloat(fixedNum);
-    }
-
     try {
         const idPost = uuidv4()
         const attributesId = uuidv4()

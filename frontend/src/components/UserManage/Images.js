@@ -1,14 +1,12 @@
 import { FcOldTimeCamera } from "react-icons/fc";
 import { CiTrash } from "react-icons/ci";
-import { memo, useState } from "react";
+import { memo } from "react";
 
-function Images({ images, setImages }) {
-
-    const[imagesPreview,setImagesPreview] = useState([])
+function Images({ images, setImages,imagesPreview,setImagesPreview }) {
 
     const handleUploadImages = (e) => {
         const files = e.target.files
-        setImages([...files])
+        setImages([images,...files])
         for (const file of files) {
             setImagesPreview(images => [...images, URL.createObjectURL(file)])
         }
