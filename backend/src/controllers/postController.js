@@ -73,8 +73,8 @@ const handleDeletePostByID = async (req, res) => {
 
 const handleUpdatePostByID = async (req, res) => {
     try {
-        let idPost = req.query.idPost
-        const message = await updatePostByID(idPost)
+        let data = req.body
+        const message = await updatePostByID(data)
 
         return res.status(200).json(message)
     } catch (error) {

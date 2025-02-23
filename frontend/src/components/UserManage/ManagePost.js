@@ -79,7 +79,7 @@ function ManagePost() {
             </div>
             <div className="pt-28">
                 <div className="flex flex-col">
-                    <div className="overflow-x-auto sm:mx-0.5 lg:mx-0.5">
+                    <div className="sm:mx-0.5 lg:mx-0.5">
                         <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8">
                             <div className="overflow-hidden">
                                 <table className="min-w-full">
@@ -111,7 +111,7 @@ function ManagePost() {
                                                 return (
                                                     <tr key={`tr-${post.id}`} className="bg-gray-100 border-b">
                                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{(currentPage - 1) * limit + index + 1}</td>
-                                                        <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-normal line-clamp-2">
+                                                        <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-normal line-clamp-2 overflow-hidden max-h-[4em]">
                                                             {post.title}
                                                         </td>
                                                         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">

@@ -6,7 +6,7 @@ function Images({ images, setImages,imagesPreview,setImagesPreview }) {
 
     const handleUploadImages = (e) => {
         const files = e.target.files
-        setImages([images,...files])
+        setImages([...images,...files])
         for (const file of files) {
             setImagesPreview(images => [...images, URL.createObjectURL(file)])
         }

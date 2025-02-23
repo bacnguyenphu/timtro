@@ -1,11 +1,15 @@
 import { IoMdClose } from "react-icons/io";
 import { useLocation } from "react-router-dom";
-import { deletePostByID, getPostByID } from "../../services/apiPost";
+import { deletePostByID, getPostByID, updatePostByID } from "../../services/apiPost";
 import { toast } from 'react-toastify'
 import Address from "./Address";
 import { useState, useEffect } from "react";
 import OverView from "./OverView";
 import Images from "./Images";
+import _ from "lodash"
+import { uploadImgCloudinary } from "../../services/apiUploadImgCloudinary";
+
+import ClipLoader from "react-spinners/ClipLoader";
 
 function Modal({ setIsShowModal, isDeletePost, fetchPosts }) {
 
@@ -73,14 +77,12 @@ function Modal({ setIsShowModal, isDeletePost, fetchPosts }) {
         priceCode: '',
         areaCode: '',
         wardCode: '',
-        idPost
+        idPost:idPost
     })
 
     const [images1, setImages1] = useState([]) // imagé này dùng để đẩy lên cloudinary rồi lấy link ảnh
     const [imagesPreview, setImagesPreview] = useState([])
-
-    console.log('check images>>>', images1);
-
+    const [isLoad,setIsLoad] = useState(false)
 
     useEffect(() => {
         const fetchGetPostByID = async () => {
@@ -99,7 +101,8 @@ function Modal({ setIsShowModal, isDeletePost, fetchPosts }) {
                     images: res.post.images.images,
                     wardCode: res.post.wardCode,
                     areaCode: identifyPriceCodeAreaCode(res.post.priceNumber, "PRICE"),
-                    priceCode: identifyPriceCodeAreaCode(res.post.areaNumber, "ACREAGE")
+                    priceCode: identifyPriceCodeAreaCode(res.post.areaNumber, "ACREAGE"),
+                    idPost:idPost
                 })
                 setImagesPreview(JSON.parse(res.post.images.images))
             }
@@ -124,9 +127,42 @@ function Modal({ setIsShowModal, isDeletePost, fetchPosts }) {
     }
 
     const handleClickBtnUpdate = async () => {
-        console.log('check payload>>>', {...payload,images:JSON.stringify([...images1])});
-
+        setIsLoad(true)
+        const res = await updatePostByID(await handleGetLinkImgs())
+        if(res.err===0){
+            fetchPosts()
+            setIsShowModal(false)
+            toast.success(res.mess)
+        }
+         setIsLoad(false)                                                            
     }
+
+    const handleGetLinkImgs = async () => {
+        let imgsTemp = []
+        for (let i of images1) {
+            if (i instanceof File) {
+                let formData = new FormData()
+                formData.append("file", i)
+                formData.append("upload_preset", "timtro-zhnwbawr")
+                const res = await uploadImgCloudinary(formData)
+
+                if (res.status === 200) {
+                    imgsTemp = [...imgsTemp, `${res.data.url}`]
+                }
+            }
+            else{
+                imgsTemp = [...imgsTemp, i]
+            }
+
+        }
+
+        let imgString = JSON.stringify([...imgsTemp])
+
+        let newData = _.cloneDeep(payload)
+        newData = { ...newData, images: imgString }
+        return newData
+    }
+
 
     return (
         <div className="fixed z-20 bg-opacity-65 bg-black left-0 top-0 right-0 bottom-0"
@@ -165,7 +201,8 @@ function Modal({ setIsShowModal, isDeletePost, fetchPosts }) {
                         <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                             onClick={() => { handleClickBtnUpdate() }}
                         >
-                            Cập nhập
+                            {!isLoad && <span>Hoàn tất</span>}
+                            {isLoad && <ClipLoader color="#FFFFFF" />}
                         </button>
                     }
                     <button className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"

@@ -47,8 +47,6 @@ const getPostsByPaginate = async (page, limit, category, price, area, isNewPost)
     try {
         let whereCondition = {}
 
-        console.log('check isNewPost>>>', isNewPost);
-
         if (!page && !limit) {
             return {
                 err: 1,
@@ -116,8 +114,8 @@ const getPostByID = async (idPost) => {
             where: { id: idPost },
             // attributes: ['id', 'title', 'stars', 'address', 'description'],
             include: [
-                { model: db.Attribute, as: 'attribute', attributes: ['price', 'acreage', 'published','id'], },
-                { model: db.Image, as: 'images', attributes: ['images','id'] },
+                { model: db.Attribute, as: 'attribute', attributes: ['price', 'acreage', 'published', 'id'], },
+                { model: db.Image, as: 'images', attributes: ['images', 'id'] },
                 { model: db.User, as: 'user', attributes: ['name', 'phone', 'avatar'] },
             ],
         })
@@ -284,10 +282,11 @@ const deletePostByID = async (idPost) => {
     }
 }
 
-const updatePostByID = async (idPost) => {
+const updatePostByID = async (data) => {
+    
     try {
         const post = await db.Post.findOne({
-            where: { id: idPost },
+            where: { id: data.idPost },
             attributes: ['id'],
             include: [
                 { model: db.Attribute, as: 'attribute', attributes: ['id'], },
@@ -302,31 +301,55 @@ const updatePostByID = async (idPost) => {
             }
         }
 
-        // await db.Post.destroy({
-        //     where: {
-        //         id: idPost
-        //     },
-        // });
+        await db.Post.update(
+            {
+                title: data?.title,
+                address: data?.address,
+                categoryCode: data?.categoryCode,
+                description: data?.description,
+                priceCode: data?.priceCode,
+                areaCode: data?.areaCode,
+                priceNumber: data?.price,
+                areaNumber: data?.acreage,
+                wardCode: data?.wardCode
+            },
+            {
+                where: {
+                    id: data.idPost
+                },
+            },
+        );
 
-        // await db.Attribute.destroy({
-        //     where: {
-        //         id: post.attribute.id
-        //     },
-        // });
+        await db.Attribute.update(
+            {
+                price: iditifyPrice(data?.price),
+                acreage: `${data?.acreage}m2`
+            },
+            {
+                where: {
+                    id: post.attribute.id
+                },
+            },
+        );
 
-        // await db.Image.destroy({
-        //     where: {
-        //         id: post.images.id
-        //     },
-        // });
+        await db.Image.update(
+            {
+                images: data?.images
+            },
+            {
+                where: {
+                    id: post.images.id
+                },
+            },
+        );
 
         return {
             err: 0,
-            mess: "Delete is success !"
+            mess: "Update is success !"
         }
 
     } catch (error) {
-        console.log('Lỗi ở deletePostByID: ', error);
+        console.log('Lỗi ở updatePostByID: ', error);
         return {
             err: -999,
             mess: "Error Server!"

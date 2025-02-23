@@ -24,4 +24,8 @@ const deletePostByID = (idPost)=>{
     return axios.delete('delete-post-by-id',{params:{idPost}})
 }
 
-export {getPost,getPostByPaginate,createNewPost,getPostsByIDUser,deletePostByID,getPostByID}
+const updatePostByID = (data)=>{
+    return axios.put('update-post-by-id',data)
+}
+
+export {getPost,getPostByPaginate,createNewPost,getPostsByIDUser,deletePostByID,getPostByID,updatePostByID}
