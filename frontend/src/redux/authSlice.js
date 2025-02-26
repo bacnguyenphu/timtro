@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { handleLogin } from '../services/apiAuth'
 import { toast } from 'react-toastify'
+import { blobToBase64 } from '../utils/convertBase64'
+import { useNavigate } from 'react-router-dom'
 
 const initialState = {
     isAuthenticate: false,
@@ -8,8 +10,11 @@ const initialState = {
     id:'',
     name: '',
     phone:'',
+    zalo:'',
     avatar: null
 }
+
+// const navigate = useNavigate()
 
 export const login = createAsyncThunk("AuthenUser/login", async (payload) => {
     try {
@@ -22,6 +27,7 @@ export const login = createAsyncThunk("AuthenUser/login", async (payload) => {
                 id:'',
                 name: '',
                 phone:'',
+                zalo:'',
                 avatar: null
             }
         }
@@ -30,9 +36,10 @@ export const login = createAsyncThunk("AuthenUser/login", async (payload) => {
             isAuthenticate: true,
             token: res.token,
             name: res.name,
-            avatar: res.avatar,
+            avatar: blobToBase64(res.avatar),
             phone: res.phone,
             id:res.id,
+            zalo:res.zalo
         }
     } catch (error) {
         console.log(error);
@@ -58,12 +65,13 @@ export const authSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(login.fulfilled, (state, action) => {
-                console.log('check ection>>>', action.payload);
                 state.isAuthenticate = action.payload.isAuthenticate
                 state.name = action.payload.name
                 state.token = action.payload.token
                 state.phone = action.payload.phone
                 state.id = action.payload.id
+                state.zalo = action.payload.zalo
+                state.avatar = action.payload.avatar
             })
     }
 })

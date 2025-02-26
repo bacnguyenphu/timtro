@@ -40,6 +40,7 @@ const register = async (data) => {
 
 const login = async (data) => {
     try {
+
         if (!data.phone && !data.password) {
             return {
                 err: 3,
@@ -68,7 +69,8 @@ const login = async (data) => {
             id: user.id,
             name: user.name,
             phone: user.phone,
-            avatar: user.avatar
+            avatar: user.avatar,
+            zalo: user.zalo
         })
 
         return {
@@ -78,6 +80,7 @@ const login = async (data) => {
             name: user.name,
             phone: user.phone,
             avatar: user.avatar,
+            zalo: user.zalo,
             token: token
         }
 
@@ -90,4 +93,90 @@ const login = async (data) => {
     }
 }
 
-module.exports = { register, login }
+const getInfoUser = async (phone) => {
+    try {
+        let user = await db.User.findOne({
+            where: { phone: phone }
+        })
+
+        return {
+            err: 0,
+            user: user
+        }
+
+    } catch (error) {
+        console.log("Lỗi ở getInfoUser: ", error);
+        return {
+            err: -999,
+            mess: "Error server"
+        }
+    }
+}
+
+const updateUser = async (data) => {
+    try {
+        console.log("data>>",!data?.passwordCurrent);
+        
+        let user = await db.User.findOne({
+            where: { id: data.id }
+        })
+
+        if (!user) {
+            return {
+                err: 1,
+                mess: "User not exist!"
+            }
+        }
+
+        if (data?.passwordCurrent===true) {
+            const checkPass = bcrypt.compareSync(data.passwordCurrent, user.password)
+            if (!checkPass) {
+                return {
+                    err: 2,
+                    mess: "Password is not correct"
+                }
+            }
+        }
+
+        const dataUpdate = {}
+
+        if(data?.passwordCurrent===true && data?.passwordNew===true){
+            dataUpdate.name= data.name
+            dataUpdate.password = data.passwordNew
+            dataUpdate.phone = data.phone
+            dataUpdate.zalo = data.zalo
+            dataUpdate.avatar = data.avatar
+        }
+        else{
+            dataUpdate.name= data.name
+            dataUpdate.phone = data.phone
+            dataUpdate.zalo = data.zalo
+            dataUpdate.avatar = data.avatar
+        }
+
+        await db.User.update(
+            {
+                ...dataUpdate
+            },
+            {
+                where: {
+                    id: data.id,
+                },
+            },
+        );
+
+        return{
+            err:0,
+            mess:"Update success"
+        }
+
+    } catch (error) {
+        console.log('Lỗi ở updateUser: ', error);
+        return {
+            err: -999,
+            mess: `Error server : Lỗi ở updateUser : ${error}`
+        }
+    }
+}
+
+module.exports = { register, login, getInfoUser, updateUser }

@@ -8,5 +8,9 @@ const handleRegister = async(data)=>{
     return axios.post('register',data)
 }
 
-export {handleLogin,handleRegister}
+const handleUpdateUser = async(data)=>{
+    return axios.put('update-user',data)
+}
+
+export {handleLogin,handleRegister,handleUpdateUser}
 
