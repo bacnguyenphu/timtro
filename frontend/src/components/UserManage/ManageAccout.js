@@ -1,13 +1,16 @@
 import { useState } from "react";
 import HeaderTitle from "./HeaderTitle";
-
+import { logout } from "../../redux/authSlice";
 import { GiConfirmed } from "react-icons/gi";
 import { FcPlus } from "react-icons/fc";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import imageAvatarDefault from '../../assets/images/user.png'
 import { fileToBase64 } from "../../utils/convertBase64";
 import ModalPhoneAndPassword from "./ModalPhoneAndPassword";
 import { handleUpdateUser } from "../../services/apiAuth";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { LOGIN } from "../../utils/paths";
 
 function ManageAccout() {
 
@@ -15,6 +18,9 @@ function ManageAccout() {
     const [isShowModal, setIsShowModal] = useState(false)
     const [isChangePhone, setIsChangePhone] = useState(false)
     const [isChangePass, setIsChangePass] = useState(false)
+
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const [info, setInfo] = useState({
         id: user.id,
@@ -32,8 +38,16 @@ function ManageAccout() {
     const handleClickUpdate = async() => {
         console.log('check info>>>', info);
         const res = await handleUpdateUser(info)
-        console.log('check ress>>',res);
         
+        if(res.err===0){
+            toast.success(res.mess + ". Please login again!")
+        }
+        else{
+            toast.error(res.mess)
+            return
+        }
+        dispatch(logout())
+        navigate(LOGIN)
     }
 
     const handleShowChangePhone = () => {

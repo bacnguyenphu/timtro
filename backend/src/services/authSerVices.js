@@ -93,11 +93,14 @@ const login = async (data) => {
     }
 }
 
-const getInfoUser = async (phone) => {
+const getInfoUser = async (idUser) => {
     try {
-        let user = await db.User.findOne({
-            where: { phone: phone }
-        })
+        let user = await db.User.findOne(
+            {
+                attributes: ['id', 'name', 'phone', 'zalo', 'avatar'],
+                where: { id: idUser },
+            },
+        )
 
         return {
             err: 0,
@@ -115,8 +118,8 @@ const getInfoUser = async (phone) => {
 
 const updateUser = async (data) => {
     try {
-        console.log("data>>",!data?.passwordCurrent);
-        
+        console.log("data>>", data);
+
         let user = await db.User.findOne({
             where: { id: data.id }
         })
@@ -128,8 +131,10 @@ const updateUser = async (data) => {
             }
         }
 
-        if (data?.passwordCurrent===true) {
+        if (data?.passwordCurrent) {
             const checkPass = bcrypt.compareSync(data.passwordCurrent, user.password)
+            console.log('check pass>>>', checkPass);
+
             if (!checkPass) {
                 return {
                     err: 2,
@@ -140,19 +145,22 @@ const updateUser = async (data) => {
 
         const dataUpdate = {}
 
-        if(data?.passwordCurrent===true && data?.passwordNew===true){
-            dataUpdate.name= data.name
-            dataUpdate.password = data.passwordNew
+        if (data?.passwordCurrent && data?.passwordNew) {
+            dataUpdate.name = data.name
+            dataUpdate.password = hassPassword(data.passwordNew)
             dataUpdate.phone = data.phone
             dataUpdate.zalo = data.zalo
             dataUpdate.avatar = data.avatar
         }
-        else{
-            dataUpdate.name= data.name
+        else {
+            dataUpdate.name = data.name
             dataUpdate.phone = data.phone
             dataUpdate.zalo = data.zalo
             dataUpdate.avatar = data.avatar
         }
+
+        console.log('check dataupdate>>>', dataUpdate);
+
 
         await db.User.update(
             {
@@ -165,9 +173,9 @@ const updateUser = async (data) => {
             },
         );
 
-        return{
-            err:0,
-            mess:"Update success"
+        return {
+            err: 0,
+            mess: "Update success"
         }
 
     } catch (error) {

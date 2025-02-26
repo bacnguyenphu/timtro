@@ -2,19 +2,17 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { handleLogin } from '../services/apiAuth'
 import { toast } from 'react-toastify'
 import { blobToBase64 } from '../utils/convertBase64'
-import { useNavigate } from 'react-router-dom'
 
 const initialState = {
     isAuthenticate: false,
     token: null,
-    id:'',
+    id: '',
     name: '',
-    phone:'',
-    zalo:'',
+    phone: '',
+    zalo: '',
     avatar: null
 }
 
-// const navigate = useNavigate()
 
 export const login = createAsyncThunk("AuthenUser/login", async (payload) => {
     try {
@@ -24,10 +22,10 @@ export const login = createAsyncThunk("AuthenUser/login", async (payload) => {
             return {
                 isAuthenticate: false,
                 token: null,
-                id:'',
+                id: '',
                 name: '',
-                phone:'',
-                zalo:'',
+                phone: '',
+                zalo: '',
                 avatar: null
             }
         }
@@ -38,17 +36,13 @@ export const login = createAsyncThunk("AuthenUser/login", async (payload) => {
             name: res.name,
             avatar: blobToBase64(res.avatar),
             phone: res.phone,
-            id:res.id,
-            zalo:res.zalo
+            id: res.id,
+            zalo: res.zalo
         }
     } catch (error) {
         console.log(error);
         return null
     }
-    // let dataAuth ={
-    //     name: res.name,
-    //     token: res.token,
-    // }
 })
 
 export const authSlice = createSlice({
@@ -60,6 +54,15 @@ export const authSlice = createSlice({
             state.name = action.payload.name
             state.isAuthenticate = true
         },
+        logout: (state) => {
+            state.isAuthenticate = false
+            state.token = null
+            state.id = ''
+            state.name = ''
+            state.phone = ''
+            state.zalo = ''
+            state.avatar = null
+        }
 
     },
     extraReducers: (builder) => {
@@ -77,6 +80,6 @@ export const authSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { loginUser } = authSlice.actions
+export const { loginUser,logout } = authSlice.actions
 
 export default authSlice.reducer

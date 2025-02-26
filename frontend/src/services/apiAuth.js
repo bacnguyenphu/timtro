@@ -12,5 +12,9 @@ const handleUpdateUser = async(data)=>{
     return axios.put('update-user',data)
 }
 
-export {handleLogin,handleRegister,handleUpdateUser}
+const handleGetInforUser = async(idUser)=>{
+    return axios.get('getUser',{params:{id:idUser}})
+}
+
+export {handleLogin,handleRegister,handleUpdateUser,handleGetInforUser}
 

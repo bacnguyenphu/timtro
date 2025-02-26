@@ -8,18 +8,21 @@ import { IoIosCamera } from "react-icons/io";
 import imageAvatarDefault from '../assets/images/user.png'
 import imageDefault from '../assets/images/imageDefault.svg'
 
-import { useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 import { onChangCurrentPage } from "../redux/currentPageSlice";
 
 import ReactPaginate from 'react-paginate';
 import moment from 'moment';
 import 'moment/locale/vi';
+import { blobToBase64 } from "../utils/convertBase64";
 moment.locale('vi');
 
 
 function List({ posts, totalPages = 10, isBtnDefault, setIsBtnDefault,
     isBtnNewPost, setIsBtnNewPost }) {
     const [isLikePost, setIsLikePost] = useState(false);
+    console.log('check post: ', posts);
+
 
     const dispatch = useDispatch()
 
@@ -27,12 +30,12 @@ function List({ posts, totalPages = 10, isBtnDefault, setIsBtnDefault,
         dispatch(onChangCurrentPage(event.selected + 1))
     };
 
-    const handleClickBtnDefault = ()=>{
+    const handleClickBtnDefault = () => {
         setIsBtnDefault(true)
         setIsBtnNewPost(false)
     }
 
-    const handleClickBtnNewPost = ()=>{
+    const handleClickBtnNewPost = () => {
         setIsBtnDefault(false)
         setIsBtnNewPost(true)
     }
@@ -127,7 +130,7 @@ function List({ posts, totalPages = 10, isBtnDefault, setIsBtnDefault,
                                             <div className="size-11 border p-1 rounded-full overflow-hidden cursor-pointer">
                                                 <img
                                                     className="object-cover object-center size-full rounded-full"
-                                                    alt="Ảnh lỗi" src={post?.user?.avatar || imageAvatarDefault}
+                                                    alt="Ảnh lỗi" src={post?.user?.avatar !== null ? blobToBase64(post?.user?.avatar) : post?.user?.avatar || imageAvatarDefault}
                                                     onError={(e) => {
                                                         e.target.onerror = null; // Ngăn lặp vô hạn
                                                         e.target.src = imageAvatarDefault; // Đổi sang ảnh mặc định

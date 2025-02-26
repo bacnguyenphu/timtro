@@ -5,7 +5,7 @@ import { IoFolderOpenOutline } from "react-icons/io5";
 import { IoIosLogOut } from "react-icons/io";
 import { CiUser } from "react-icons/ci";
 
-import { HOMEPAGE, USER_MANAGE_POSTS, USER_POST_NEW, USER_PROFILE } from "../../utils/paths";
+import { HOMEPAGE, LOGOUT, USER_MANAGE_POSTS, USER_POST_NEW, USER_PROFILE } from "../../utils/paths";
 import { NavLink } from "react-router-dom";
 
 function SideBar() {
@@ -30,7 +30,7 @@ function SideBar() {
         {
             title: "Đăng xuất",
             icon: <IoIosLogOut size={'1.25rem'} />,
-            path: HOMEPAGE,
+            path: LOGOUT,
         },
     ]
 

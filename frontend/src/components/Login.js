@@ -12,7 +12,9 @@ function Login() {
     const dispatch = useDispatch()
 
     const handleClickLogin = async() => {
+        
         const payload = {phone,password}
+        console.log(payload);
         dispatch(login(payload))
     }
 

@@ -32,8 +32,8 @@ const handleLogin = async(req,res)=>{
 
 const handleGetInfoUser = async(req,res)=>{
     try {
-        const phone = req.query.phone
-        const messasge = await getInfoUser(phone)
+        const id = req.query.id
+        const messasge = await getInfoUser(id)
         return res.status(200).json(messasge)
         
     } catch (error) {

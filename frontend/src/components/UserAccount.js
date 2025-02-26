@@ -4,7 +4,7 @@ import { IoFolderOpenOutline } from "react-icons/io5";
 import { CiUser } from "react-icons/ci";
 import { IoIosLogOut } from "react-icons/io";
 
-import { USER_MANAGE_POSTS, USER_PROFILE, HOMEPAGE } from "../utils/paths";
+import { USER_MANAGE_POSTS, USER_PROFILE, LOGOUT } from "../utils/paths";
 
 import imageAvatarDefault from '../assets/images/user.png'
 
@@ -46,7 +46,7 @@ function UserAccount() {
         {
             title: "Đăng xuất",
             icon: <IoIosLogOut size={'1.5rem'} />,
-            path: HOMEPAGE
+            path: LOGOUT
         },
     ]
 
