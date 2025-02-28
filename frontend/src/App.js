@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router";
 import { HOMEPAGE, LOGIN, LOGOUT, REGISTER, USER_MANAGE_POSTS, USER_POST_NEW, USER_PROFILE } from "./utils/paths";
 import { LayoutDefault, LayoutUserManage } from "./layouts";
-import { Login, HomePage, Register, ListFilter, Logout } from "./components";
+import { Login, HomePage, Register, ListFilter, Logout, DetailPost } from "./components";
 import { ToastContainer } from 'react-toastify';
 import { ManageAccout, ManagePost, PostNew } from "./components/UserManage";
 
@@ -12,7 +12,9 @@ function App() {
         <Route path={HOMEPAGE} element={<LayoutDefault />}>
           <Route index element={<HomePage />} />
           <Route path="/filter">
-            <Route path=":category" element={<ListFilter/>}/>
+            <Route path=":category" element={<ListFilter/>}>
+                <Route path=":idPost" element={<DetailPost/>}/>
+            </Route>
           </Route>
 
           <Route path={LOGIN} element={<Login />} />

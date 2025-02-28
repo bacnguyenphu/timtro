@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       Post.belongsTo(models.Attribute, { foreignKey: 'attributesId', as: 'attribute' })
       Post.belongsTo(models.Image, { foreignKey: 'imagesId', as: 'images' })
       Post.belongsTo(models.User, { foreignKey: 'userId', as: 'user' })
+      Post.belongsToMany(models.User,{through: "Posts_like", as: 'posts_like', foreignKey: 'id_post'})
       // Post.belongsTo(models.Category,{foreignKey: 'categoryCode',targetKey:'code', as: 'category'})
     }
   }

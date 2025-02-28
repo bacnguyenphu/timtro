@@ -8,7 +8,7 @@ import { IoIosCamera } from "react-icons/io";
 import imageAvatarDefault from '../assets/images/user.png'
 import imageDefault from '../assets/images/imageDefault.svg'
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { onChangCurrentPage } from "../redux/currentPageSlice";
 
 import ReactPaginate from 'react-paginate';
@@ -21,10 +21,9 @@ moment.locale('vi');
 function List({ posts, totalPages = 10, isBtnDefault, setIsBtnDefault,
     isBtnNewPost, setIsBtnNewPost }) {
     const [isLikePost, setIsLikePost] = useState(false);
-    console.log('check post: ', posts);
-
 
     const dispatch = useDispatch()
+    const currentPage = useSelector(state=>state.currentPage.currentPage)
 
     const handlePageClick = (event) => {
         dispatch(onChangCurrentPage(event.selected + 1))
@@ -164,7 +163,9 @@ function List({ posts, totalPages = 10, isBtnDefault, setIsBtnDefault,
                 <ReactPaginate
                     onPageChange={handlePageClick}
                     pageRangeDisplayed={5}
-                    pageCount={10}
+                    pageCount={totalPages}
+                    forcePage={currentPage-1}
+                    // initialPage={0}
                     nextLabel=">"
                     previousLabel="<"
                     previousLinkClassName="block px-3 py-2 border border-gray-300 rounded hover:bg-blue-primary"

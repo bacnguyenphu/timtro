@@ -11,7 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      User.hasMany(models.Post,{foreignKey:'userId',as:'posts'})
+      User.hasMany(models.Post, { foreignKey: 'userId', as: 'posts' });
+      User.belongsToMany(models.Post, { through: "Posts_like", as: 'posts_like', foreignKey: 'id_user' });
+      // Group.belongsToMany(models.Role, { through: "Group_Role", as: 'roles', foreignKey: 'groupId' });
     }
   }
   User.init({

@@ -69,11 +69,23 @@ const getPostsByPaginate = async (page, limit, category, price, area, isNewPost)
         }
 
         const { count, rows } = await db.Post.findAndCountAll({
-            attributes: ['id', 'title', 'stars', 'address', 'description', 'categoryCode', 'priceCode', 'areaCode', 'createdAt'],
+            attributes: ['id', 'title', 'stars', 'address', 'description', 'categoryCode', 'priceCode', 'areaCode', 'createdAt',
+                // [
+                //     Sequelize.literal(`
+                //       CASE 
+                //         WHEN posts_likes.id_user IS NOT NULL 
+                //         THEN true 
+                //         ELSE false 
+                //       END
+                //     `), 
+                //     'isLiked'
+                //   ]
+            ],
             include: [
+                { model: db.User, as: 'posts_like', through: { attributes: ['id_post','id_user'] }   },
                 { model: db.Attribute, as: 'attribute', attributes: ['price', 'acreage', 'published'], },
                 { model: db.Image, as: 'images', attributes: ['images'] },
-                { model: db.User, as: 'user', attributes: ['name', 'phone', 'avatar',] },
+                { model: db.User, as: 'user', attributes: ['id', 'name', 'phone', 'avatar',] },
                 // { model: db.Category, as: 'category' }
             ],
             where: {
@@ -101,7 +113,7 @@ const getPostsByPaginate = async (page, limit, category, price, area, isNewPost)
         console.log("Lỗi ở getPostsByPaginate : ", error);
         return {
             err: -999,
-            mess: "Error server!!",
+            mess:`Error server!! : ${error}`,
             posts: [],
             totalPosts: 0
         }
@@ -283,7 +295,7 @@ const deletePostByID = async (idPost) => {
 }
 
 const updatePostByID = async (data) => {
-    
+
     try {
         const post = await db.Post.findOne({
             where: { id: data.idPost },
