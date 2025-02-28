@@ -14,7 +14,7 @@ function LayoutDefault() {
                 </div>
             </div>
             <div className="flex justify-center mt-5">
-                <div className="w-[1010px] flex gap-x-3 mt-32">
+                <div className="w-[1010px] flex gap-x-5 mt-32">
                     <div className="w-2/3">
                         <Outlet />
                     </div>
