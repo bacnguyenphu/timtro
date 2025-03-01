@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { getPostByPaginate } from "../services/apiPost";
 import { Outlet, useParams, useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { scrollToTop } from "../utils/sctrolltop";
 
 function ListFilter() {
 
@@ -36,6 +37,7 @@ function ListFilter() {
 
     useEffect(() => {
         fetchPosts()
+        scrollToTop()
     }, [currentPage, param.category, searchParams.get("price"), searchParams.get("area"), isBtnNewPost])
 
     // Hàm này mình gọi post được filter, các giá trị được truyền vào hàm getPostByPaginate nếu rỗng thì không lọc

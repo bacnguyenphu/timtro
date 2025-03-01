@@ -15,6 +15,7 @@ import ReactPaginate from 'react-paginate';
 import { blobToBase64 } from "../utils/convertBase64";
 import moment from 'moment';
 import 'moment/locale/vi';
+import { useNavigate } from "react-router-dom";
 moment.locale('vi');
 
 
@@ -23,7 +24,8 @@ function List({ posts, totalPages = 10, isBtnDefault, setIsBtnDefault,
     const [isLikePost, setIsLikePost] = useState(false);
 
     const dispatch = useDispatch()
-    const currentPage = useSelector(state=>state.currentPage.currentPage)
+    const currentPage = useSelector(state => state.currentPage.currentPage)
+    const navigate = useNavigate()
 
     const handlePageClick = (event) => {
         dispatch(onChangCurrentPage(event.selected + 1))
@@ -65,8 +67,11 @@ function List({ posts, totalPages = 10, isBtnDefault, setIsBtnDefault,
                 {posts && posts.length > 0 &&
                     posts.map((post => {
                         return (
-                            <div key={post.id} className="item flex flex-col h-[475px] bg-white rounded-lg p-4">
-                                <div className="images h-1/2 flex gap-1 overflow-hidden rounded-lg relative">
+                            <div key={post.id} className="item flex flex-col h-[475px] bg-white rounded-lg p-4"
+                            >
+                                <div className="images h-1/2 flex gap-1 overflow-hidden rounded-lg relative cursor-pointer"
+                                    onClick={() => { navigate(`/filter/${post.categoryCode}/${post.id}`) }}
+                                >
                                     <div className="w-[60%]">
                                         <img className=" object-cover object-center size-full"
                                             alt={''}
@@ -101,7 +106,9 @@ function List({ posts, totalPages = 10, isBtnDefault, setIsBtnDefault,
                                     </div>
                                 </div>
                                 <div className="content h-1/2 cursor-default">
-                                    <div className="text-red-primary font-semibold text-[17px] mt-4 flex cursor-pointer">
+                                    <div className="text-red-primary font-semibold text-[17px] mt-4 flex cursor-pointer"
+                                        onClick={() => { navigate(`/filter/${post.categoryCode}/${post.id}`) }}
+                                    >
                                         <div className="flex pt-1">
                                             <span className=""><MdStar color="#FFD454" /></span>
                                             <span className=""><MdStar color="#FFD454" /></span>
@@ -164,7 +171,7 @@ function List({ posts, totalPages = 10, isBtnDefault, setIsBtnDefault,
                     onPageChange={handlePageClick}
                     pageRangeDisplayed={5}
                     pageCount={totalPages}
-                    forcePage={currentPage-1}
+                    forcePage={currentPage - 1}
                     // initialPage={0}
                     nextLabel=">"
                     previousLabel="<"

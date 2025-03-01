@@ -1,5 +1,6 @@
 const db = require('../models/index')
 const { v4: uuidv4 } = require('uuid');
+const { Op } = require("sequelize");
 
 const iditifyPrice = (value) => {
     let price = +value / 1000000.0
@@ -69,20 +70,9 @@ const getPostsByPaginate = async (page, limit, category, price, area, isNewPost)
         }
 
         const { count, rows } = await db.Post.findAndCountAll({
-            attributes: ['id', 'title', 'stars', 'address', 'description', 'categoryCode', 'priceCode', 'areaCode', 'createdAt',
-                // [
-                //     Sequelize.literal(`
-                //       CASE 
-                //         WHEN posts_likes.id_user IS NOT NULL 
-                //         THEN true 
-                //         ELSE false 
-                //       END
-                //     `), 
-                //     'isLiked'
-                //   ]
-            ],
+            attributes: ['id', 'title', 'stars', 'address', 'description', 'categoryCode', 'priceCode', 'areaCode', 'createdAt',],
             include: [
-                { model: db.User, as: 'posts_like', through: { attributes: ['id_post','id_user'] }   },
+                { model: db.User, as: 'posts_like', through: { attributes: ['id_post', 'id_user'] } },
                 { model: db.Attribute, as: 'attribute', attributes: ['price', 'acreage', 'published'], },
                 { model: db.Image, as: 'images', attributes: ['images'] },
                 { model: db.User, as: 'user', attributes: ['id', 'name', 'phone', 'avatar',] },
@@ -113,7 +103,7 @@ const getPostsByPaginate = async (page, limit, category, price, area, isNewPost)
         console.log("Lỗi ở getPostsByPaginate : ", error);
         return {
             err: -999,
-            mess:`Error server!! : ${error}`,
+            mess: `Error server!! : ${error}`,
             posts: [],
             totalPosts: 0
         }
@@ -369,4 +359,101 @@ const updatePostByID = async (data) => {
     }
 }
 
-module.exports = { getPosts, getPostsByPaginate, createNewPost, getPostsByIDUser, deletePostByID, updatePostByID, getPostByID }
+const likePostByUser = async (idPost, idUser) => {
+    try {
+        if (!idPost) {
+            return {
+                err: 1,
+                mess: `ID post is required`,
+            }
+        }
+
+        if (!idUser) {
+            return {
+                err: 2,
+                mess: `ID user is required`,
+            }
+        }
+
+        const post = await db.Post.findOne({
+            where: { id: idPost },
+        })
+
+        if (post === null) {
+            return {
+                err: 3,
+                mess: "Post do not exist"
+            }
+        }
+
+        await db.Posts_like.create({
+            id_user: idUser,
+            id_post: idPost,
+        })
+
+        return {
+            err: 0,
+            mess: `User id:${idUser} liked post id:${idPost} succsess!!`,
+        }
+
+    } catch (error) {
+        console.log("Lỗi ở likePostByUser");
+        return {
+            err: -999,
+            mess: `Error server!!: ${error}`,
+        }
+    }
+}
+
+const dislikeByUser = async (idPost, idUser) => {
+    try {
+        if (!idPost) {
+            return {
+                err: 1,
+                mess: `ID post is required`,
+            }
+        }
+
+        if (!idUser) {
+            return {
+                err: 2,
+                mess: `ID user is required`,
+            }
+        }
+
+        const post = await db.Post.findOne({
+            where: { id: idPost },
+        })
+
+        if (post === null) {
+            return {
+                err: 3,
+                mess: "Post do not exist"
+            }
+        }
+
+        await db.Posts_like.destroy({
+            where: {
+                [Op.and]: [{ id_user: idUser }, { id_post: idPost }],
+            },
+        });
+
+        return {
+            err: 0,
+            mess: "Dislike succsess!!"
+        }
+
+    } catch (error) {
+        console.log("Lỗi ở dislikeByUser");
+        return {
+            err: -999,
+            mess: `Error server!!: ${error}`,
+        }
+    }
+}
+
+module.exports = {
+    getPosts, getPostsByPaginate, createNewPost, getPostsByIDUser,
+    deletePostByID, updatePostByID, getPostByID, likePostByUser,
+    dislikeByUser
+}

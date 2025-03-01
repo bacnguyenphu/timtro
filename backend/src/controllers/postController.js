@@ -1,4 +1,6 @@
-const { getPosts, getPostsByPaginate, createNewPost, getPostsByIDUser, deletePostByID, updatePostByID, getPostByID } = require('../services/postServices')
+const { getPosts, getPostsByPaginate, createNewPost, getPostsByIDUser,
+    deletePostByID, updatePostByID, getPostByID, likePostByUser,
+    dislikeByUser } = require('../services/postServices')
 
 const handleGetposts = async (req, res) => {
     try {
@@ -82,4 +84,34 @@ const handleUpdatePostByID = async (req, res) => {
     }
 }
 
-module.exports = { handleGetposts, handleGetPostsByPaginate, handleCreateNewPost, handleGetPostByIDUser, handleDeletePostByID, handleUpdatePostByID,handleGetPostByID }
+const handleLikePostByUser = async (req, res) => {
+    try {
+        let idUser = req.query.idUser
+        let idPost = req.query.idPost
+
+        const message = await likePostByUser(idPost, idUser)
+        return res.status(200).json(message)
+
+    } catch (error) {
+        console.log("Lỗi ở handleLikePostByUser: ", error);
+    }
+}
+
+const handleDislikeByUser = async (req, res) => {
+    try {
+        let idUser = req.query.idUser
+        let idPost = req.query.idPost
+
+        const message = await dislikeByUser(idPost, idUser)
+        return res.status(200).json(message)
+
+    } catch (error) {
+        console.log("Lỗi ở handleDislikeByUser: ", error);
+    }
+}
+
+module.exports = {
+    handleGetposts, handleGetPostsByPaginate, handleCreateNewPost,
+    handleGetPostByIDUser, handleDeletePostByID, handleUpdatePostByID,
+    handleGetPostByID, handleLikePostByUser,handleDislikeByUser
+}

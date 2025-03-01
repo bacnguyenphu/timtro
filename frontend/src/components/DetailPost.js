@@ -13,14 +13,13 @@ import imageDefault from '../assets/images/imageDefault.svg'
 
 import moment from 'moment';
 import 'moment/locale/vi';
+import { scrollToTop } from "../utils/sctrolltop";
 moment.locale('vi');
 
 function DetailPost() {
 
     const param = useParams()
-    const [post,setPost] = useState({})
-    console.log('check post: ',post);
-    
+    const [post, setPost] = useState({})
 
     function SampleNextArrow(props) {
         const { onClick } = props;
@@ -46,7 +45,7 @@ function DetailPost() {
 
     const settings = {
         dots: true,
-        infinite: true,
+        infinite: false,
         speed: 500,
         slidesToShow: 1,
         slidesToScroll: 1,
@@ -54,14 +53,19 @@ function DetailPost() {
         prevArrow: <SamplePrevArrow />
     }
 
-    const [previewImgs, setPreviewImgs] = useState([])
-
+    const [previewImgs, setPreviewImgs] = useState([imageDefault])
+    console.log(previewImgs);
 
     const fetchPostByID = async () => {
         const res = await getPostByID(param?.idPost)
         console.log('check res>>>', res);
         if (res.err == 0) {
-            setPreviewImgs([...JSON.parse(res.post?.images?.images)]||[imageDefault])
+            if(JSON.parse(res.post?.images?.images).length>0){
+                setPreviewImgs([...JSON.parse(res.post?.images?.images)])
+            }
+            else{
+                setPreviewImgs([imageDefault])
+            }
             setPost(res.post)
         }
     }
@@ -70,7 +74,8 @@ function DetailPost() {
         if (param?.idPost) {
             fetchPostByID()
         }
-    }, [])
+        scrollToTop()
+    }, [param?.idPost])
 
     return (
         <div className="">
@@ -79,8 +84,8 @@ function DetailPost() {
                     {previewImgs.length > 0 &&
                         previewImgs.map((img, index) => {
                             return (
-                                <div key={`img-${index}`} className="h-[276px]">
-                                    <img className="object-cover object-center size-full" src={img} />
+                                <div key={`img-${index}`} className="h-[276px] overflow-hidden">
+                                    <img className="object-cover object-center size-full bg-no-repeat" src={img} />
                                 </div>
                             )
                         })
@@ -88,25 +93,68 @@ function DetailPost() {
                 </Slider>
             </div>
             <div className="mt-10 bg-white rounded-lg flex flex-col px-3">
-                    <p className="text-red-primary font-semibold mt-4 flex cursor-pointer float-start text-2xl">{post.title}</p>
-                    <div className="flex items-center my-4">
-                        <span><CiLocationOn size={'1.25rem'} color="blue"/></span>
-                        <p>Địa chỉ: {post?.address}</p>
+                <p className="text-red-primary font-semibold mt-4 flex cursor-pointer float-start text-2xl">{post.title}</p>
+                <div className="flex my-4">
+                    <span className="mt-1"><CiLocationOn size={'1.25rem'} color="blue" /></span>
+                    <p>Địa chỉ: {post?.address}</p>
+                </div>
+                <div className="flex gap-10">
+                    <div className="flex items-center gap-2">
+                        <span><IoPricetagsOutline /></span>
+                        <span className="font-bold text-green-600">{post?.attribute?.price}</span>
                     </div>
-                    <div className="flex gap-10">
-                        <div className="flex items-center gap-2">
-                            <span><IoPricetagsOutline /></span>
-                            <span className="font-bold text-green-600">{post?.attribute?.price}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <span><RxRulerSquare /></span>
-                            <span className="text-gray-400">{post?.attribute?.acreage}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <span><CiTimer /></span>
-                            <span className="text-gray-400">{moment(post?.createdAt).fromNow()}</span>
-                        </div>
+                    <div className="flex items-center gap-2">
+                        <span><RxRulerSquare /></span>
+                        <span className="text-gray-400">{post?.attribute?.acreage}</span>
                     </div>
+                    <div className="flex items-center gap-2">
+                        <span><CiTimer /></span>
+                        <span className="text-gray-400">{moment(post?.createdAt).format("MM/DD/YYYY")}</span>
+                    </div>
+                </div>
+                <div className="mt-10">
+                    <p className="font-semibold text-[18px]">Thông tin mô tả</p>
+                    <div className="whitespace-pre-line leading-8">
+                        {post?.description}
+                    </div>
+                </div>
+                <div className="mt-10">
+                    <p className="font-semibold text-[18px]">Thông tin liên hệ</p>
+
+                    <div className="relative overflow-x-auto sm:rounded-lg">
+                        <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+                            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                            </thead>
+                            <tbody>
+                                <tr className="odd:bg-white even:bg-gray-50 border-b border-gray-200">
+                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                        Liên hệ
+                                    </th>
+                                    <td className="px-6 py-4">
+                                    {post?.user?.name}
+                                    </td>
+                                </tr>
+                                <tr className="odd:bg-white even:bg-gray-50 border-b border-gray-200">
+                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                        Số điện thoại
+                                    </th>
+                                    <td className="px-6 py-4">
+                                        {post?.user?.phone}
+                                    </td>
+                                </tr>
+                                <tr className="odd:bg-white even:bg-gray-50 border-b border-gray-200">
+                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                        Zalo
+                                    </th>
+                                    <td className="px-6 py-4">
+                                    {post?.user?.zalo}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
             </div>
         </div>
 

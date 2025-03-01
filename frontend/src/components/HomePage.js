@@ -11,7 +11,6 @@ function HomePage() {
     const currentPage = useSelector(state=>state.currentPage.currentPage)
     const limit = 8
     const [searchParams] = useSearchParams();
-    console.log('check currentpage>>>',currentPage);
 
     const [isBtnDefault, setIsBtnDefault] = useState(true)
     const [isBtnNewPost, setIsBtnNewPost] = useState(false)

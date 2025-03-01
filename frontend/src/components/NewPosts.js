@@ -3,12 +3,15 @@ import { getPostByPaginate } from "../services/apiPost";
 import moment from 'moment';
 import imageDefault from '../assets/images/imageDefault.svg'
 import 'moment/locale/vi';
+import { useNavigate } from "react-router-dom";
 moment.locale('vi');
 
 function NewPosts() {
 
     const [newPosts, setNewPosts] = useState([])
     let lenghtNewPosts = newPosts.length
+
+    const navigate = useNavigate()
 
     const fetchNewPost = async () => {
         const res = await await getPostByPaginate(1, 10, undefined, undefined, undefined, true)
@@ -27,11 +30,13 @@ function NewPosts() {
             {newPosts && newPosts.length > 0 &&
                 newPosts.map((post, index) => {
                     return (
-                        <div key={post?.id} className={`item-newPost flex h-[110px] py-3 gap-x-2 ${index + 1 === lenghtNewPosts ? '' : ' border-b'}`}>
+                        <div key={post?.id} className={`item-newPost flex h-[110px] py-3 gap-x-2 cursor-pointer ${index + 1 === lenghtNewPosts ? '' : ' border-b'}`}
+                            onClick={() => { navigate(`/filter/${post.categoryCode}/${post.id}`) }}
+                        >
                             <div className="w-1/3 rounded-md overflow-hidden">
                                 <img className="object-cover object-center size-full"
                                     alt={''}
-                                    src={JSON.parse(post?.images?.images)[1] || imageDefault}
+                                    src={JSON.parse(post?.images?.images)[0] || imageDefault}
                                 />
                             </div>
                             <div className="w-2/3">
