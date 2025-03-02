@@ -1,6 +1,6 @@
 const { getPosts, getPostsByPaginate, createNewPost, getPostsByIDUser,
-    deletePostByID, updatePostByID, getPostByID, likePostByUser,
-    dislikeByUser } = require('../services/postServices')
+    deletePostByID, updatePostByID, getPostByID, likeAndDislikePostByUser,
+    getPostLikedOfUser } = require('../services/postServices')
 
 const handleGetposts = async (req, res) => {
     try {
@@ -84,34 +84,47 @@ const handleUpdatePostByID = async (req, res) => {
     }
 }
 
-const handleLikePostByUser = async (req, res) => {
+const handleLikeAndDislikePostByUser = async (req, res) => {
     try {
-        let idUser = req.query.idUser
-        let idPost = req.query.idPost
-
-        const message = await likePostByUser(idPost, idUser)
+        let idUser = req.body.idUser
+        let idPost = req.body.idPost
+        console.log('check idPost: ',idPost);
+        
+        const message = await likeAndDislikePostByUser(idPost, idUser)
         return res.status(200).json(message)
 
     } catch (error) {
-        console.log("Lỗi ở handleLikePostByUser: ", error);
+        console.log("Lỗi ở handleLikeAndDislikePostByUser: ", error);
     }
 }
 
-const handleDislikeByUser = async (req, res) => {
+const handleGetPostLikedOfUser = async(req,res)=>{
     try {
         let idUser = req.query.idUser
-        let idPost = req.query.idPost
-
-        const message = await dislikeByUser(idPost, idUser)
+        const message = await getPostLikedOfUser(idUser)
         return res.status(200).json(message)
 
     } catch (error) {
-        console.log("Lỗi ở handleDislikeByUser: ", error);
+        console.log("Lỗi ở handleGetPostLikedOfUser: ",error);
+        
     }
 }
+
+// const handleDislikeByUser = async (req, res) => {
+//     try {
+//         let idUser = req.query.idUser
+//         let idPost = req.query.idPost
+
+//         const message = await dislikeByUser(idPost, idUser)
+//         return res.status(200).json(message)
+
+//     } catch (error) {
+//         console.log("Lỗi ở handleDislikeByUser: ", error);
+//     }
+// }
 
 module.exports = {
     handleGetposts, handleGetPostsByPaginate, handleCreateNewPost,
     handleGetPostByIDUser, handleDeletePostByID, handleUpdatePostByID,
-    handleGetPostByID, handleLikePostByUser,handleDislikeByUser
+    handleGetPostByID, handleLikeAndDislikePostByUser,handleGetPostLikedOfUser
 }

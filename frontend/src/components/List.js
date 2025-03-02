@@ -2,7 +2,6 @@ import { MdStar } from "react-icons/md";
 import { LuDot } from "react-icons/lu";
 import { FaPhoneAlt } from "react-icons/fa";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
-import { useState } from "react";
 import { IoIosCamera } from "react-icons/io";
 
 import imageAvatarDefault from '../assets/images/user.png'
@@ -16,12 +15,16 @@ import { blobToBase64 } from "../utils/convertBase64";
 import moment from 'moment';
 import 'moment/locale/vi';
 import { useNavigate } from "react-router-dom";
+import { likeAndDislikePostByUser } from "../services/apiPost";
+import { handleGetPostLikeOfUser } from "../redux/postIsLikedSlice";
 moment.locale('vi');
 
 
 function List({ posts, totalPages = 10, isBtnDefault, setIsBtnDefault,
     isBtnNewPost, setIsBtnNewPost }) {
-    const [isLikePost, setIsLikePost] = useState(false);
+
+    const postIsLiked = useSelector(state => state.postsIsLiked.postIsLiked)
+    const user = useSelector(state => state.authenUser)
 
     const dispatch = useDispatch()
     const currentPage = useSelector(state => state.currentPage.currentPage)
@@ -39,6 +42,13 @@ function List({ posts, totalPages = 10, isBtnDefault, setIsBtnDefault,
     const handleClickBtnNewPost = () => {
         setIsBtnDefault(false)
         setIsBtnNewPost(true)
+    }
+
+    const handleClickLikeAndDislikePostByUser = async(idPost) => {
+        const res = await likeAndDislikePostByUser(idPost,user.id)
+        if(res.err===0){
+           await dispatch(handleGetPostLikeOfUser(user.id))
+        }
     }
 
     return (
@@ -155,8 +165,10 @@ function List({ posts, totalPages = 10, isBtnDefault, setIsBtnDefault,
                                                 </span>
                                                 <span>{post?.user?.phone}</span>
                                             </button>
-                                            <span className="cursor-pointer" onClick={() => { setIsLikePost(!isLikePost) }}>
-                                                {isLikePost ? <FaHeart size={'1.25rem'} color="E41B23" /> : <FaRegHeart size={'1.25rem'} />}
+                                            <span className="cursor-pointer"
+                                                onClick={() => { handleClickLikeAndDislikePostByUser(post?.id) }}
+                                            >
+                                                {postIsLiked&&postIsLiked.some(item => item.id_post === post?.id) ? <FaHeart size={'1.25rem'} color="E41B23" /> : <FaRegHeart size={'1.25rem'} />}
                                             </span>
                                         </div>
                                     </div>

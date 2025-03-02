@@ -1,31 +1,39 @@
 import axios from "../utils/customAxios";
 
-const getPost = ()=>{
+const getPost = () => {
     return axios.get('getPosts')
 }
 
-const getPostByID = (idPost)=>{
-    return axios.get('get-post-by-id',{params:{idPost}})
+const getPostByID = (idPost) => {
+    return axios.get('get-post-by-id', { params: { idPost } })
 }
 
-const getPostByPaginate = (page,limit,category,price,area,isNewPost)=>{
-    return axios.get('getPostByPaginate',{ params: { page,limit,category,price,area,isNewPost}})
+const getPostByPaginate = (page, limit, category, price, area, isNewPost) => {
+    return axios.get('getPostByPaginate', { params: { page, limit, category, price, area, isNewPost } })
 }
 
-const createNewPost = data=>{
-    return axios.post('createNewPost',data)
+const createNewPost = data => {
+    return axios.post('createNewPost', data)
 }
 
-const getPostsByIDUser = (page,limit,idUser)=>{
-    return axios.get('get-post-by-idUser',{ params: { page,limit,idUser}})
+const getPostsByIDUser = (page, limit, idUser) => {
+    return axios.get('get-post-by-idUser', { params: { page, limit, idUser } })
 }
 
-const deletePostByID = (idPost)=>{
-    return axios.delete('delete-post-by-id',{params:{idPost}})
+const deletePostByID = (idPost) => {
+    return axios.delete('delete-post-by-id', { params: { idPost } })
 }
 
-const updatePostByID = (data)=>{
-    return axios.put('update-post-by-id',data)
+const updatePostByID = (data) => {
+    return axios.put('update-post-by-id', data)
 }
 
-export {getPost,getPostByPaginate,createNewPost,getPostsByIDUser,deletePostByID,getPostByID,updatePostByID}
+const getPostLikeOfUser = (idUser) => {
+    return axios.get('get-post-is-liked-byIdUser', { params: { idUser } })
+}
+
+const likeAndDislikePostByUser = (idPost, idUser) => {
+    return axios.post('like-dislike-post-by-user', { idPost, idUser })
+}
+
+export { getPost, getPostByPaginate, createNewPost, getPostsByIDUser, deletePostByID, getPostByID, updatePostByID, getPostLikeOfUser, likeAndDislikePostByUser }

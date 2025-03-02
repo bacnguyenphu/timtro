@@ -15,6 +15,7 @@ const register = async (data) => {
                 mess: "Params is required"
             }
         }
+        
         const [user, created] = await db.User.findOrCreate({
             where: { phone: data.phone },
             defaults: {

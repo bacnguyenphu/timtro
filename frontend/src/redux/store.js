@@ -3,6 +3,7 @@ import authUser from './authSlice'
 import category from './categorySlice'
 import price from './priceSlice'
 import area from './areaSlice'
+import postsIsLiked from './postIsLikedSlice'
 import currentPage from './currentPageSlice'
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
@@ -20,6 +21,7 @@ export const store = configureStore({
         category: category,
         price: price,
         area: area,
+        postsIsLiked: postsIsLiked,
         currentPage: currentPage
     },
 })

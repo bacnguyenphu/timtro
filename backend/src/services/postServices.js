@@ -1,6 +1,6 @@
 const db = require('../models/index')
 const { v4: uuidv4 } = require('uuid');
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
 
 const iditifyPrice = (value) => {
     let price = +value / 1000000.0
@@ -359,7 +359,7 @@ const updatePostByID = async (data) => {
     }
 }
 
-const likePostByUser = async (idPost, idUser) => {
+const likeAndDislikePostByUser = async (idPost, idUser) => {
     try {
         if (!idPost) {
             return {
@@ -386,10 +386,28 @@ const likePostByUser = async (idPost, idUser) => {
             }
         }
 
-        await db.Posts_like.create({
-            id_user: idUser,
-            id_post: idPost,
+        const [Posts_like, created] = await db.Posts_like.findOrCreate({
+            where: {
+                [Op.and]: [{ id_user: idUser }, { id_post: idPost }],
+            },
+            defaults: {
+                id_user: idUser,
+                id_post: idPost,
+            }
         })
+
+        if (!created) {
+            await db.Posts_like.destroy({
+                where: {
+                    [Op.and]: [{ id_user: idUser }, { id_post: idPost }],
+                },
+            });
+
+            return {
+                err: 0,
+                mess: "Dislike succsess!!"
+            }
+        }
 
         return {
             err: 0,
@@ -397,7 +415,7 @@ const likePostByUser = async (idPost, idUser) => {
         }
 
     } catch (error) {
-        console.log("Lỗi ở likePostByUser");
+        console.log("Lỗi ở likeAndDislikePostByUser");
         return {
             err: -999,
             mess: `Error server!!: ${error}`,
@@ -405,55 +423,86 @@ const likePostByUser = async (idPost, idUser) => {
     }
 }
 
-const dislikeByUser = async (idPost, idUser) => {
+const getPostLikedOfUser = async (idUser) => {
     try {
-        if (!idPost) {
-            return {
-                err: 1,
-                mess: `ID post is required`,
-            }
-        }
 
         if (!idUser) {
             return {
-                err: 2,
+                err: 1,
                 mess: `ID user is required`,
             }
         }
 
-        const post = await db.Post.findOne({
-            where: { id: idPost },
+        const idPostIsLiked = await db.Posts_like.findAll({
+            where: { id_user: idUser },
+            attributes: ['id_post', 'createdAt']
         })
-
-        if (post === null) {
-            return {
-                err: 3,
-                mess: "Post do not exist"
-            }
-        }
-
-        await db.Posts_like.destroy({
-            where: {
-                [Op.and]: [{ id_user: idUser }, { id_post: idPost }],
-            },
-        });
 
         return {
             err: 0,
-            mess: "Dislike succsess!!"
+            mess: `Get posts is liked by user success!!`,
+            data: idPostIsLiked
         }
 
     } catch (error) {
-        console.log("Lỗi ở dislikeByUser");
+        console.log("Lỗi ở getPostLikeOfUser: ", error);
         return {
             err: -999,
-            mess: `Error server!!: ${error}`,
+            mess: `Error server!!: ${error}`
         }
+
     }
 }
 
+// const dislikeByUser = async (idPost, idUser) => {
+//     try {
+//         if (!idPost) {
+//             return {
+//                 err: 1,
+//                 mess: `ID post is required`,
+//             }
+//         }
+
+//         if (!idUser) {
+//             return {
+//                 err: 2,
+//                 mess: `ID user is required`,
+//             }
+//         }
+
+//         const post = await db.Post.findOne({
+//             where: { id: idPost },
+//         })
+
+//         if (post === null) {
+//             return {
+//                 err: 3,
+//                 mess: "Post do not exist"
+//             }
+//         }
+
+//         await db.Posts_like.destroy({
+//             where: {
+//                 [Op.and]: [{ id_user: idUser }, { id_post: idPost }],
+//             },
+//         });
+
+//         return {
+//             err: 0,
+//             mess: "Dislike succsess!!"
+//         }
+
+//     } catch (error) {
+//         console.log("Lỗi ở dislikeByUser");
+//         return {
+//             err: -999,
+//             mess: `Error server!!: ${error}`,
+//         }
+//     }
+// }
+
 module.exports = {
     getPosts, getPostsByPaginate, createNewPost, getPostsByIDUser,
-    deletePostByID, updatePostByID, getPostByID, likePostByUser,
-    dislikeByUser
+    deletePostByID, updatePostByID, getPostByID, likeAndDislikePostByUser,
+    getPostLikedOfUser
 }
