@@ -1,6 +1,6 @@
 const { getPosts, getPostsByPaginate, createNewPost, getPostsByIDUser,
     deletePostByID, updatePostByID, getPostByID, likeAndDislikePostByUser,
-    getPostLikedOfUser } = require('../services/postServices')
+    getPostLikedOfUser,getPostsLiked } = require('../services/postServices')
 
 const handleGetposts = async (req, res) => {
     try {
@@ -110,21 +110,23 @@ const handleGetPostLikedOfUser = async(req,res)=>{
     }
 }
 
-// const handleDislikeByUser = async (req, res) => {
-//     try {
-//         let idUser = req.query.idUser
-//         let idPost = req.query.idPost
+const handleGetPostsLiked = async(req,res)=>{
+    try {
+        const listId = req.body.listId
+        console.log('check listID>>>>',listId);
+        
+        const message = await getPostsLiked(listId)
 
-//         const message = await dislikeByUser(idPost, idUser)
-//         return res.status(200).json(message)
-
-//     } catch (error) {
-//         console.log("Lỗi ở handleDislikeByUser: ", error);
-//     }
-// }
+        return res.status(200).json(message)
+    } catch (error) {
+        console.log("Lỗi ở handleGetPostLiked: ",error);
+        
+    }
+}
 
 module.exports = {
     handleGetposts, handleGetPostsByPaginate, handleCreateNewPost,
     handleGetPostByIDUser, handleDeletePostByID, handleUpdatePostByID,
-    handleGetPostByID, handleLikeAndDislikePostByUser,handleGetPostLikedOfUser
+    handleGetPostByID, handleLikeAndDislikePostByUser,handleGetPostLikedOfUser,
+    handleGetPostsLiked
 }

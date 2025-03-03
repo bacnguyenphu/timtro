@@ -36,4 +36,14 @@ const likeAndDislikePostByUser = (idPost, idUser) => {
     return axios.post('like-dislike-post-by-user', { idPost, idUser })
 }
 
-export { getPost, getPostByPaginate, createNewPost, getPostsByIDUser, deletePostByID, getPostByID, updatePostByID, getPostLikeOfUser, likeAndDislikePostByUser }
+const getPostsLiked = (listId) => {
+    console.log('check listID>>',listId);
+    
+    return axios.get('get-post-liked', { listId })
+}
+
+export {
+    getPost, getPostByPaginate, createNewPost, getPostsByIDUser,
+    deletePostByID, getPostByID, updatePostByID, getPostLikeOfUser,
+    likeAndDislikePostByUser, getPostsLiked
+}

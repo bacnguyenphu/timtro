@@ -1,16 +1,18 @@
 import { useState } from "react";
 import { FaRegPenToSquare } from "react-icons/fa6";
 import { HiOutlineFilter } from "react-icons/hi";
+import { FaRegHeart } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom'
 import ModalFilterSearch from "./ModalFilterSearch";
 import UserAccount from "./UserAccount";
 
-import { LOGIN, REGISTER, USER_POST_NEW } from "../utils/paths";
+import { LOGIN, POST_LIKED, REGISTER, USER_POST_NEW } from "../utils/paths";
 
 function Header() {
     const navigate = useNavigate()
     const userAuthen = useSelector(state => state.authenUser)
+    const postIsLiked = useSelector(state => state.postsIsLiked.postIsLiked)
     const [showModalFilterSearch, setShowModalFilterSearch] = useState(false)
 
     return (
@@ -33,12 +35,20 @@ function Header() {
                 </div>
             </div>
 
-            <div className="flex items-center gap-2 text-white">
+            <div className="flex items-center gap-4 text-white">
                 {!userAuthen?.isAuthenticate &&
                     <button className="bg-blue-primary py-1 px-2 rounded" onClick={() => { navigate(LOGIN) }}>Đăng nhập</button>
                 }
                 {!userAuthen?.isAuthenticate &&
                     <button className="bg-blue-primary py-1 px-2 rounded" onClick={() => { navigate(REGISTER) }}>Đăng Ký</button>
+                }
+                {userAuthen?.isAuthenticate &&
+                    <div className="relative cursor-pointer"
+                    onClick={()=>{navigate(POST_LIKED)}}
+                    >
+                        <span><FaRegHeart color="black" size={'1.25rem'}/></span>
+                        <span className="bg-red-primary text-white text-[9px] px-1 rounded absolute -top-2 -left-1">{postIsLiked?.length}</span>
+                    </div>
                 }
                 {userAuthen?.isAuthenticate &&
                     <p className="text-black"><UserAccount /></p>

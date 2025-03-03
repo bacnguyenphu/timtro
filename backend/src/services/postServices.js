@@ -440,7 +440,7 @@ const getPostLikedOfUser = async (idUser) => {
 
         return {
             err: 0,
-            mess: `Get posts is liked by user success!!`,
+            mess: `Get id posts is liked by user success!!`,
             data: idPostIsLiked
         }
 
@@ -454,55 +454,38 @@ const getPostLikedOfUser = async (idUser) => {
     }
 }
 
-// const dislikeByUser = async (idPost, idUser) => {
-//     try {
-//         if (!idPost) {
-//             return {
-//                 err: 1,
-//                 mess: `ID post is required`,
-//             }
-//         }
+const getPostsLiked = async (listId) => {
+    try {
+        if (!listId) {
+            return {
+                err: 1,
+                mess: `listId is required!!`
+            }
+        }
 
-//         if (!idUser) {
-//             return {
-//                 err: 2,
-//                 mess: `ID user is required`,
-//             }
-//         }
+        const data = await db.Post.findAll({
+            where: {
+                id: { [Op.in]: JSON.parse(listId) } // Lấy tất cả user có ID trong danh sách này
+            }
+        })
 
-//         const post = await db.Post.findOne({
-//             where: { id: idPost },
-//         })
+        return {
+            err: 0,
+            mess: "Get post liked success!",
+            data: data
+        }
 
-//         if (post === null) {
-//             return {
-//                 err: 3,
-//                 mess: "Post do not exist"
-//             }
-//         }
-
-//         await db.Posts_like.destroy({
-//             where: {
-//                 [Op.and]: [{ id_user: idUser }, { id_post: idPost }],
-//             },
-//         });
-
-//         return {
-//             err: 0,
-//             mess: "Dislike succsess!!"
-//         }
-
-//     } catch (error) {
-//         console.log("Lỗi ở dislikeByUser");
-//         return {
-//             err: -999,
-//             mess: `Error server!!: ${error}`,
-//         }
-//     }
-// }
+    } catch (error) {
+        console.log("Lỗi ở getPostLiked: ", error);
+        return {
+            err: -999,
+            mess: `Error server!!: ${error}`
+        }
+    }
+}
 
 module.exports = {
     getPosts, getPostsByPaginate, createNewPost, getPostsByIDUser,
     deletePostByID, updatePostByID, getPostByID, likeAndDislikePostByUser,
-    getPostLikedOfUser
+    getPostLikedOfUser, getPostsLiked
 }
