@@ -10,7 +10,8 @@ const initialState = {
     name: '',
     phone: '',
     zalo: '',
-    avatar: null
+    avatar: null,
+    role: ''
 }
 
 
@@ -26,7 +27,8 @@ export const login = createAsyncThunk("AuthenUser/login", async (payload) => {
                 name: '',
                 phone: '',
                 zalo: '',
-                avatar: null
+                avatar: null,
+                role: ''
             }
         }
         toast.success(res.mess)
@@ -37,7 +39,8 @@ export const login = createAsyncThunk("AuthenUser/login", async (payload) => {
             avatar: blobToBase64(res.avatar),
             phone: res.phone,
             id: res.id,
-            zalo: res.zalo
+            zalo: res.zalo,
+            role: res.role,
         }
     } catch (error) {
         console.log(error);
@@ -62,6 +65,7 @@ export const authSlice = createSlice({
             state.phone = ''
             state.zalo = ''
             state.avatar = null
+            state.role = ''
         }
 
     },
@@ -75,11 +79,12 @@ export const authSlice = createSlice({
                 state.id = action.payload.id
                 state.zalo = action.payload.zalo
                 state.avatar = action.payload.avatar
+                state.role = action.payload.role
             })
     }
 })
 
 // Action creators are generated for each case reducer function
-export const { loginUser,logout } = authSlice.actions
+export const { loginUser, logout } = authSlice.actions
 
 export default authSlice.reducer

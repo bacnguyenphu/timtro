@@ -3,7 +3,10 @@ const db = require('../models/index')
 const getArea = async () => {
     try {
         const area = await db.Area.findAll({
-            attributes:['id','value','code','order']
+            attributes:['id','value','code','order','min','max'],
+            order: [
+                ['min', 'ASC'],
+            ]
         })
         return{
             err: 0,

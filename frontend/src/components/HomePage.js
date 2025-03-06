@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { getPostByPaginate } from "../services/apiPost";
 import { useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { scrollToTop } from "../utils/sctrolltop";
 
 function HomePage() {
 
@@ -30,6 +31,7 @@ function HomePage() {
     }
 
     useEffect(() => {
+        scrollToTop()
         fetchPosts()
     }, [currentPage, searchParams.get("price"), searchParams.get("area"), isBtnNewPost])
 
@@ -48,7 +50,7 @@ function HomePage() {
                     {`Kênh thông tin Phòng trọ uy tín số 3 Việt Nam`} {headerPrice.length > 0 ? `, ${headerPrice[0].value}` : ''} {headerArea.length > 0 ? `, ${headerArea[0].value}` : ''}
                 </h2>
                 <p className="text-sm mt-2">
-                    Tin chuẩn số 3 không ai số 2 - uy tín đỉnh nóc, kịch trần, bay phấp phới. Cho thuê trọ giá rẻ phù hợp
+                    Tin chuẩn số 3 không ai số 4 - uy tín đỉnh nóc, kịch trần, bay phấp phới. Cho thuê trọ giá rẻ phù hợp
                     với sinh viên, nhà nguyên căn cho gia đình, thuê mặt bằng để khinh doanh, chung cư cho ai có điều kiện.
                 </p>
             </div>

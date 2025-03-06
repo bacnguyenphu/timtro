@@ -3,6 +3,8 @@ import { useSelector } from "react-redux"
 function OverView({ payload, setPayload }) {
 
     const categories = useSelector(state => state.category.categories)
+    const price = useSelector(state => state.price.price)
+    const area = useSelector(state => state.area.area)
 
     const handleOnchangePriceAndAcreage = (e, type) => {
         if (type === "PRICE") {

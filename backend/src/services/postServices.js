@@ -454,7 +454,7 @@ const getPostLikedOfUser = async (idUser) => {
     }
 }
 
-const getPostsLiked = async (listId) => {
+const getPostsLiked = async (listId,page,limit) => {
     try {
         if (!listId) {
             return {
@@ -463,16 +463,33 @@ const getPostsLiked = async (listId) => {
             }
         }
 
-        const data = await db.Post.findAll({
+        const { count, rows } = await db.Post.findAndCountAll({
+            attributes: ['id', 'title', 'stars', 'address', 'description', 'categoryCode', 'priceCode', 'areaCode', 'createdAt',],
+            include: [
+                { model: db.User, as: 'posts_like', through: { attributes: ['id_post', 'id_user'] } },
+                { model: db.Attribute, as: 'attribute', attributes: ['price', 'acreage', 'published'], },
+                { model: db.Image, as: 'images', attributes: ['images'] },
+                { model: db.User, as: 'user', attributes: ['id', 'name', 'phone', 'avatar',] },
+                // { model: db.Category, as: 'category' }
+            ],
             where: {
                 id: { [Op.in]: JSON.parse(listId) } // Lấy tất cả user có ID trong danh sách này
-            }
+            },
+            order: [
+                ['createdAt', 'DESC']
+            ] ,
+
+            offset: (page - 1) * limit,
+            limit: limit,
         })
 
         return {
             err: 0,
             mess: "Get post liked success!",
-            data: data
+            data: rows,
+            totalPosts: count,
+            totalPages: Math.ceil(count / limit),
+            currentPage: page
         }
 
     } catch (error) {

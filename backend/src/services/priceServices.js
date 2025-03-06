@@ -3,7 +3,10 @@ const db = require('../models/index')
 const getPrice =async()=>{
     try {
         let prices = await db.Price.findAll({
-            attributes:['id','value','code','order']
+            attributes:['id','value','code','order','min','max'],
+            order: [
+                ['min', 'ASC'],
+            ]
         })
         return{
             err:0,

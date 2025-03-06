@@ -18,6 +18,8 @@ module.exports = (sequelize, DataTypes) => {
         code: DataTypes.STRING,
         order: DataTypes.INTEGER,
         value: DataTypes.STRING,
+        min:DataTypes.FLOAT,
+        max:DataTypes.FLOAT,
     }, {
         sequelize,
         modelName: 'Area',

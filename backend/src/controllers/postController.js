@@ -112,10 +112,12 @@ const handleGetPostLikedOfUser = async(req,res)=>{
 
 const handleGetPostsLiked = async(req,res)=>{
     try {
-        const listId = req.body.listId
+        const listId = req.query.listId
+        let page = req.query.page
+        let limit = req.query.limit
         console.log('check listID>>>>',listId);
         
-        const message = await getPostsLiked(listId)
+        const message = await getPostsLiked(listId,+page,+limit)
 
         return res.status(200).json(message)
     } catch (error) {

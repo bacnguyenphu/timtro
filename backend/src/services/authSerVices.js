@@ -71,7 +71,8 @@ const login = async (data) => {
             name: user.name,
             phone: user.phone,
             avatar: user.avatar,
-            zalo: user.zalo
+            zalo: user.zalo,
+            role: user.role,
         })
 
         return {
@@ -80,9 +81,10 @@ const login = async (data) => {
             id: user.id,
             name: user.name,
             phone: user.phone,
+            role: user.role,
             avatar: user.avatar,
             zalo: user.zalo,
-            token: token
+            token: token,
         }
 
     } catch (error) {

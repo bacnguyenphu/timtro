@@ -17,6 +17,12 @@ module.exports = {
             value: {
                 type: Sequelize.STRING
             },
+            min: {
+                type: Sequelize.FLOAT
+            },
+            max: {
+                type: Sequelize.FLOAT
+            },
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DATE

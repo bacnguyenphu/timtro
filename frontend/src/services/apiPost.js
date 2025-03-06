@@ -36,10 +36,9 @@ const likeAndDislikePostByUser = (idPost, idUser) => {
     return axios.post('like-dislike-post-by-user', { idPost, idUser })
 }
 
-const getPostsLiked = (listId) => {
-    console.log('check listID>>',listId);
+const getPostsLiked = (listId,page,limit) => {
     
-    return axios.get('get-post-liked', { listId })
+    return axios.get('get-post-liked', { params: { listId,page,limit } })
 }
 
 export {
