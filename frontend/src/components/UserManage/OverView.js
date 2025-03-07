@@ -6,6 +6,9 @@ function OverView({ payload, setPayload }) {
     const price = useSelector(state => state.price.price)
     const area = useSelector(state => state.area.area)
 
+    console.log('check area: ', area);
+
+
     const handleOnchangePriceAndAcreage = (e, type) => {
         if (type === "PRICE") {
             setPayload({ ...payload, price: e.target.value, priceCode: identifyPriceCodeAreaCode(e.target.value, "PRICE") })
@@ -19,31 +22,59 @@ function OverView({ payload, setPayload }) {
 
     const identifyPriceCodeAreaCode = (value, type) => {
         if (type === "PRICE") {
-            if (+value / 1000000.0 < 1) {
-                return "OPTN"
-            }
-            else if (+value / 1000000.0 >= 1 && +value / 1000000.0 < 2) {
-                return "1PTN"
-            }
-            else if (+value / 1000000.0 >= 2 && +value / 1000000.0 < 3) {
-                return "2PTN"
-            }
-            else if (+value / 1000000.0 >= 3 && +value / 1000000.0 < 5) {
-                return "3PTN"
-            }
-            else if (+value / 1000000.0 >= 5 && +value / 1000000.0 < 7) {
-                return "5PTN"
-            }
-            else if (+value / 1000000.0 >= 7 && +value / 1000000.0 < 10) {
-                return "7P0O"
-            }
-            else if (+value / 1000000.0 >= 10 && +value / 1000000.0 < 15) {
-                return "1U1O"
-            }
-            else {
-                return "EP5O"
+            if (price && price.length > 0) {
+                price.forEach(item => {
+                    if(item.max===null && value >= item.min){
+                        return item.code
+                    }
+                    if(value >=item.min && value <= item.max){
+                        return item.code
+                    }
+                    
+                })
             }
         }
+
+        if(type==="ACREAGE"){
+            if(area&& area.length>0){
+                area.forEach(item => {
+                    if(item.max===null && value >= item.min){
+                        return item.code
+                    }
+                    if(value >=item.min && value <= item.max){
+                        return item.code
+                    }
+                    
+                })
+            }
+        }
+
+        // if (type === "PRICE") {
+        //     if (+value / 1000000.0 < 1) {
+        //         return "OPTN"
+        //     }
+        //     else if (+value / 1000000.0 >= 1 && +value / 1000000.0 < 2) {
+        //         return "1PTN"
+        //     }
+        //     else if (+value / 1000000.0 >= 2 && +value / 1000000.0 < 3) {
+        //         return "2PTN"
+        //     }
+        //     else if (+value / 1000000.0 >= 3 && +value / 1000000.0 < 5) {
+        //         return "3PTN"
+        //     }
+        //     else if (+value / 1000000.0 >= 5 && +value / 1000000.0 < 7) {
+        //         return "5PTN"
+        //     }
+        //     else if (+value / 1000000.0 >= 7 && +value / 1000000.0 < 10) {
+        //         return "7P0O"
+        //     }
+        //     else if (+value / 1000000.0 >= 10 && +value / 1000000.0 < 15) {
+        //         return "1U1O"
+        //     }
+        //     else {
+        //         return "EP5O"
+        //     }
+        // }
         if (type === "ACREAGE") {
             if (+value < 20) {
                 return "OPTN"
