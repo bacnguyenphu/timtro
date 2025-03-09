@@ -1,9 +1,10 @@
 import { Routes, Route } from "react-router";
-import { HOMEPAGE, LOGIN, LOGOUT, POST_LIKED, REGISTER, USER_MANAGE_POSTS, USER_POST_NEW, USER_PROFILE } from "./utils/paths";
-import { LayoutDefault, LayoutUserManage } from "./layouts";
-import { Login, HomePage, Register, ListFilter, Logout, DetailPost, PostLiked } from "./components";
+import { ADMIN_MANAGE_POSTS, ADMIN_MANAGE_USERS, HOMEPAGE, LOGIN, LOGOUT, POST_LIKED, REGISTER, USER_MANAGE_POSTS, USER_POST_NEW, USER_PROFILE } from "./utils/paths";
+import { LayoutAdmin, LayoutDefault, LayoutUserManage } from "./layouts";
+import { Login, HomePage, Register, ListFilter, Logout, DetailPost, PostLiked, ManagePost } from "./components";
 import { ToastContainer } from 'react-toastify';
-import { ManageAccout, ManagePost, PostNew } from "./components/UserManage";
+import { ManageAccout, PostNew } from "./components/UserManage";
+import { ManageUser } from "./components/Admin";
 
 function App() {
   return (
@@ -24,9 +25,17 @@ function App() {
         </Route>
 
         <Route path="/user" element={<LayoutUserManage/>}>
-          <Route path={USER_MANAGE_POSTS} element={<ManagePost/>}/>
+          <Route path={USER_MANAGE_POSTS} element={<ManagePost type={'USER'}/>}/>
           <Route path={USER_POST_NEW} element={<PostNew/>}/>
           <Route path={USER_PROFILE} element={<ManageAccout/>}/>
+        </Route>
+
+        <Route path="/admin" element={<LayoutAdmin/>}>
+            <Route path={ADMIN_MANAGE_POSTS} element={<ManagePost type={'ADMIN'}/>}/>
+            <Route path={ADMIN_MANAGE_USERS} element={<ManageUser/>} />
+            <Route path={ADMIN_MANAGE_POSTS} />
+            <Route path={ADMIN_MANAGE_POSTS} />
+            <Route path={ADMIN_MANAGE_POSTS} />
         </Route>
 
       </Routes>

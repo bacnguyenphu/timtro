@@ -3,8 +3,9 @@ import { FaCaretDown } from "react-icons/fa";
 import { IoFolderOpenOutline } from "react-icons/io5";
 import { CiUser } from "react-icons/ci";
 import { IoIosLogOut } from "react-icons/io";
+import { GrUserAdmin } from "react-icons/gr";
 
-import { USER_MANAGE_POSTS, USER_PROFILE, LOGOUT } from "../utils/paths";
+import { USER_MANAGE_POSTS, USER_PROFILE, LOGOUT, ADMIN_MANAGE_POSTS } from "../utils/paths";
 
 import imageAvatarDefault from '../assets/images/user.png'
 
@@ -101,6 +102,14 @@ function UserAccount() {
                             )
                         })}
                     </ul>
+                    {user&&user.role==='R2'&&
+                    <div className="flex mt-3 gap-2 cursor-pointer items-center"
+                    onClick={()=>{navigate(ADMIN_MANAGE_POSTS)}}
+                    >
+                        <span><GrUserAdmin/></span>
+                        <span>Quản trị viên</span>
+                    </div>
+                    }
                 </div>
             }
         </div>

@@ -58,7 +58,6 @@ function DetailPost() {
 
     const fetchPostByID = async () => {
         const res = await getPostByID(param?.idPost)
-        console.log('check res>>>', res);
         if (res.err == 0) {
             if(JSON.parse(res.post?.images?.images).length>0){
                 setPreviewImgs([...JSON.parse(res.post?.images?.images)])
@@ -109,7 +108,7 @@ function DetailPost() {
                     </div>
                     <div className="flex items-center gap-2">
                         <span><CiTimer /></span>
-                        <span className="text-gray-400">{moment(post?.createdAt).format("MM/DD/YYYY")}</span>
+                        <span className="text-gray-400">{moment(post?.createdAt).format("DD/MM/YYYY")}</span>
                     </div>
                 </div>
                 <div className="mt-10">

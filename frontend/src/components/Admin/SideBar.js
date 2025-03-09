@@ -1,31 +1,42 @@
+import { CiUser } from "react-icons/ci";
+import { IoFolderOpenOutline, IoPricetagOutline } from "react-icons/io5";
+import { PiSelectionForeground } from "react-icons/pi";
+import { TbCategoryMinus } from "react-icons/tb";
+import { ADMIN_MANAGE_ACREAGE, ADMIN_MANAGE_CATEGORIES, ADMIN_MANAGE_POSTS, ADMIN_MANAGE_USERS, LOGOUT } from "../../utils/paths";
 import { useSelector } from "react-redux";
 import imageAvatarDefault from '../../assets/images/user.png'
-import { FaRegPenToSquare } from "react-icons/fa6";
-import { IoFolderOpenOutline } from "react-icons/io5";
-import { IoIosLogOut } from "react-icons/io";
-import { CiUser } from "react-icons/ci";
-
-import { LOGOUT, USER_MANAGE_POSTS, USER_POST_NEW, USER_PROFILE } from "../../utils/paths";
 import { NavLink } from "react-router-dom";
+import { IoIosLogOut } from "react-icons/io";
 
 function SideBar() {
 
     const user = useSelector(state => state.authenUser)
+
     const navs = [
         {
-            title: "Đăng tin mới",
-            icon: <FaRegPenToSquare size={'1.25rem'} />,
-            path: USER_POST_NEW,
-        },
-        {
-            title: "Danh sách tin đăng",
+            title: "Quản lí bài đăng",
             icon: <IoFolderOpenOutline size={'1.25rem'} />,
-            path: USER_MANAGE_POSTS,
+            path: ADMIN_MANAGE_POSTS,
         },
         {
-            title: "Quản lí tài khoản",
+            title: "Quản lí người dùng",
             icon: <CiUser size={'1.25rem'} />,
-            path: USER_PROFILE,
+            path: ADMIN_MANAGE_USERS,
+        },
+        {
+            title: "Quản lí danh mục",
+            icon: <TbCategoryMinus size={'1.25rem'} />,
+            path: ADMIN_MANAGE_CATEGORIES,
+        },
+        {
+            title: "Quản lí diện tích",
+            icon: <PiSelectionForeground size={'1.25rem'} />,
+            path: ADMIN_MANAGE_ACREAGE,
+        },
+        {
+            title: "Quản lí khoảng giá",
+            icon: <IoPricetagOutline size={'1.25rem'} />,
+            path: ADMIN_MANAGE_ACREAGE,
         },
         {
             title: "Đăng xuất",

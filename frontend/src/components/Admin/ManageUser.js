@@ -1,81 +1,49 @@
-import { getPostsByIDUser } from "../../services/apiPost";
-import HeaderTitle from "./HeaderTitle";
-import { useEffect, useState } from 'react'
-import imageDefault from '../../assets/images/imageDefault.svg'
-import ReactPaginate from 'react-paginate';
-
+import { useEffect, useState } from "react";
+import { HeaderTitle } from "../UserManage";
+import imageAvatarDefault from '../../assets/images/user.png'
 import moment from 'moment';
 import 'moment/locale/vi';
-import { useSelector } from "react-redux";
-import Modal from "./Modal";
-import { useLocation, useNavigate } from "react-router-dom";
+import { getUsers } from "../../services/apiUser";
+import { blobToBase64 } from "../../utils/convertBase64";
+import ReactPaginate from "react-paginate";
 moment.locale('vi');
 
-function ManagePost() {
+function ManageUser() {
 
-    const navs = [
-        {
-            title: "Tất cả",
-            id: "tatca"
-        },
-
-    ]
-
-    const location = useLocation()
-    const navigate = useNavigate()
-
-    const user = useSelector(state => state.authenUser)
-    const idUser = user.id
-    const limit = 10
-    const [isShowModal, setIsShowModal] = useState(false)
-    const [isDeletePost, setIsDeletePost] = useState(false)
-
-    const [posts, setPosts] = useState([])
+    const [users, setUsers] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(0)
+    const limit = 10
 
-    const fetchPosts = async () => {
-        const res = await getPostsByIDUser(currentPage, limit, idUser)
-        // console.log('check rers>>>', res);
 
-        if (res.err === 0) {
-            setPosts(res.posts)
-            setTotalPages(res.totalPages)
-        }
+    const handleClickBtnDelete = () => { }
+
+    const handleClickBtnUpdate = () => {
+
     }
-
-    useEffect(() => {
-        fetchPosts()
-    }, [])
 
     const handlePageClick = (event) => {
         setCurrentPage(event.selected + 1)
-    };
-
-    const handleClickBtnDelete = (idPost) => {
-        setIsShowModal(true)
-        setIsDeletePost(true)
-
-        const currentParams = new URLSearchParams(location.search);
-        currentParams.set("id", idPost); // Thêm hoặc cập nhật param        
-        navigate(`${location.pathname}?${currentParams.toString()}`, { replace: true });
     }
 
-    const handleClickBtnUpdate = (idPost)=>{
-        setIsShowModal(true)
-        setIsDeletePost(false)
-        const currentParams = new URLSearchParams(location.search);
-        currentParams.set("id", idPost); // Thêm hoặc cập nhật param        
-        navigate(`${location.pathname}?${currentParams.toString()}`, { replace: true });
-    }
+    useEffect(() => {
+        const fetchUsers = async () => {
+            const res = await getUsers(currentPage, limit)
+            if (res.err === 0) {
+                setUsers(res.data)
+                setTotalPages(res.totalPages)
+            }
+        }
+        fetchUsers()
+    }, [currentPage])
 
-    // console.log('check post>>', posts);
+    console.log('check users: ', users);
 
 
     return (
         <div>
             <div className="fixed w-full">
-                <HeaderTitle title={'Danh sách tin đăng'} navs={navs} />
+                <HeaderTitle title={'Danh sách người dùng'} />
             </div>
             <div className="pt-28">
                 <div className="flex flex-col">
@@ -85,57 +53,57 @@ function ManagePost() {
                                 <table className="min-w-full">
                                     <thead className="bg-white border-b">
                                         <tr>
-                                            <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left w-8">
+                                            <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
                                                 #
                                             </th>
-                                            <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left w-[28.56%]">
-                                                Tiêu đề
+                                            <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                                Tên
                                             </th>
-                                            <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left w-[14.28%]">
+                                            <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
                                                 Ảnh đại diện
                                             </th>
-                                            <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left w-[14.28%]">
-                                                Giá
+                                            <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                                Số điện thoại
                                             </th>
-                                            <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left w-[14.28%]">
-                                                Ngày đăng
+                                            <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                                Zalo
                                             </th>
-                                            <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left w-[14.28%]">
+                                            <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
                                                 Tùy chọn
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {posts.length > 0 &&
-                                            posts.map((post, index) => {
+                                        {users.length > 0 &&
+                                            users.map((user, index) => {
                                                 return (
-                                                    <tr key={`tr-${post.id}`} className="bg-gray-100 border-b">
+                                                    <tr key={`tr-${user.id}`} className="bg-gray-100 border-b">
                                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{(currentPage - 1) * limit + index + 1}</td>
                                                         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-normal line-clamp-2 overflow-hidden max-h-[4em]">
-                                                            {post.title}
+                                                            {user?.name}
                                                         </td>
                                                         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                                            <div className="h-10 w-14 rounded-md overflow-hidden">
+                                                            <div className="size-12 rounded-full overflow-hidden">
                                                                 <img className="size-full object-cover object-center"
-                                                                    src={JSON.parse(post.images.images)[0] || imageDefault} />
+                                                                    src={user.avatar !== null ? blobToBase64(user?.avatar) : imageAvatarDefault} />
                                                             </div>
                                                         </td>
                                                         <td className="text-sm text-green-600 font-medium px-6 py-4 whitespace-nowrap">
-                                                            {post.attribute.price}
+                                                            {user?.phone}
                                                         </td>
                                                         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                                            {moment(post?.createdAt).fromNow()}
+                                                            {user?.zalo}
                                                         </td>
                                                         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                                             <div className="flex gap-3">
                                                                 <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                                                                onClick={()=>{handleClickBtnUpdate(post.id)}}
+                                                                    onClick={() => { handleClickBtnUpdate(user.id) }}
                                                                 >
                                                                     Sửa
                                                                 </button>
 
                                                                 <button type="button" className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                                                                    onClick={() => { handleClickBtnDelete(post.id) }}
+                                                                    onClick={() => { handleClickBtnDelete(user.id) }}
                                                                 >
                                                                     Xóa
                                                                 </button>
@@ -152,12 +120,13 @@ function ManagePost() {
                     </div>
                 </div>
             </div>
-
-            <div className="peage">
+            <div>
                 <ReactPaginate
                     onPageChange={handlePageClick}
                     pageRangeDisplayed={5}
                     pageCount={totalPages}
+                    forcePage={currentPage - 1} // cái này giúp hiển thị page theo state react
+                    // initialPage={0}
                     nextLabel=">"
                     previousLabel="<"
                     previousLinkClassName="block px-3 py-2 border border-gray-300 rounded hover:bg-blue-primary"
@@ -174,11 +143,8 @@ function ManagePost() {
                     renderOnZeroPageCount={null}
                 />
             </div>
-            {isShowModal && <Modal setIsShowModal={setIsShowModal} isDeletePost={isDeletePost}
-                fetchPosts={fetchPosts}
-            />}
         </div>
     );
 }
 
-export default ManagePost;
+export default ManageUser;

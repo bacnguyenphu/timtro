@@ -7,14 +7,13 @@ import { LuDot } from "react-icons/lu";
 import imageDefault from '../assets/images/imageDefault.svg'
 import imageAvatarDefault from '../assets/images/user.png'
 
-import moment from 'moment';
-import 'moment/locale/vi';
 import { FaHeart, FaPhoneAlt, FaRegHeart } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { likeAndDislikePostByUser } from "../services/apiPost";
 import { handleGetPostLikeOfUser } from "../redux/postIsLikedSlice";
 import { IoIosCamera } from "react-icons/io";
-import { onChangCurrentPage } from "../redux/currentPageSlice";
+import moment from 'moment';
+import 'moment/locale/vi';
 moment.locale('vi');
 
 function Post({ post }) {

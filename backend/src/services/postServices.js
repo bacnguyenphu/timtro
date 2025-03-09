@@ -204,9 +204,9 @@ const getPostsByIDUser = async (page, limit, idUser) => {
                 userId: idUser
             },
 
-            // order: isNewPost ? [
-            //     ['createdAt', 'DESC']
-            // ] : null,
+            order: [
+                ['createdAt', 'DESC']
+            ] ,
 
             offset: (page - 1) * limit,
             limit: limit,
