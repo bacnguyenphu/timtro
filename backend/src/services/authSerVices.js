@@ -1,7 +1,7 @@
 const db = require('../models/index')
 const { v4: uuidv4 } = require('uuid');
-const bcrypt = require('bcrypt');
 const { createJWT } = require('../middleware/JWTaction')
+const bcrypt = require('bcrypt');
 
 const hassPassword = (password) => {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(12))
@@ -136,7 +136,6 @@ const updateUser = async (data) => {
 
         if (data?.passwordCurrent) {
             const checkPass = bcrypt.compareSync(data.passwordCurrent, user.password)
-            console.log('check pass>>>', checkPass);
 
             if (!checkPass) {
                 return {
@@ -161,9 +160,6 @@ const updateUser = async (data) => {
             dataUpdate.zalo = data.zalo
             dataUpdate.avatar = data.avatar
         }
-
-        console.log('check dataupdate>>>', dataUpdate);
-
 
         await db.User.update(
             {

@@ -1,5 +1,9 @@
-const { where } = require('sequelize')
 const db = require('../models/index')
+const bcrypt = require('bcrypt');
+
+const hassPassword = (password) => {
+    return bcrypt.hashSync(password, bcrypt.genSaltSync(12))
+}
 
 const getUsers = async (page, limit) => {
     try {
@@ -57,20 +61,20 @@ const deleteUser = async (idUser) => {
             where: { id: idUser }
         })
 
-        if(!user){
-            return{
-                err:2,
-                mess:'User is not exist!'
+        if (!user) {
+            return {
+                err: 2,
+                mess: 'User is not exist!'
             }
         }
 
         await db.User.destroy({
-            where:{id:idUser}
+            where: { id: idUser }
         })
 
-        return{
-            err:0,
-            mess:'Delete user success !'
+        return {
+            err: 0,
+            mess: 'Delete user success !'
         }
 
     } catch (error) {
@@ -82,4 +86,48 @@ const deleteUser = async (idUser) => {
     }
 }
 
-module.exports = { getUsers, deleteUser }
+const resetPassUser = async (idUser) => {
+    try {
+        if (!idUser) {
+            return {
+                err: 1,
+                mess: 'Id user is required !'
+            }
+        }
+
+        const user = await db.User.findOne({
+            where: { id: idUser }
+        })
+
+        if (!user) {
+            return {
+                err: 2,
+                mess: 'User is not exist!'
+            }
+        }
+
+        await db.User.update(
+            { password: hassPassword('123456') },
+            {
+                where: {
+                    id: idUser,
+                },
+            },
+        );
+
+        return {
+            err: 0,
+            mess: `Reset password account ${user.phone} success!`
+        }
+
+    } catch (error) {
+        console.log('Lỗi ở resetPassUser: ', error);
+        return {
+            err: -999,
+            mess: `Error server: ${error}`
+        }
+
+    }
+}
+
+module.exports = { getUsers, deleteUser, resetPassUser }

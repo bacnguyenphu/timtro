@@ -6,6 +6,7 @@ import 'moment/locale/vi';
 import { getUsers } from "../../services/apiUser";
 import { blobToBase64 } from "../../utils/convertBase64";
 import ReactPaginate from "react-paginate";
+import Modal from "./Modal";
 moment.locale('vi');
 
 function ManageUser() {
@@ -13,13 +14,19 @@ function ManageUser() {
     const [users, setUsers] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(0)
+    const [isShowModal, setIsShowModal] = useState(false)
+    const [isDelete, setIsDelete] = useState(false)
     const limit = 10
 
 
-    const handleClickBtnDelete = () => { }
+    const handleClickBtnDelete = () => {
+        setIsShowModal(true)
+        setIsDelete(true)
+    }
 
-    const handleClickBtnUpdate = () => {
-
+    const handleClickResetPass = () => {
+        setIsShowModal(true)
+        setIsDelete(false)
     }
 
     const handlePageClick = (event) => {
@@ -97,9 +104,9 @@ function ManageUser() {
                                                         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                                             <div className="flex gap-3">
                                                                 <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                                                                    onClick={() => { handleClickBtnUpdate(user.id) }}
+                                                                    onClick={() => { handleClickResetPass(user.id) }}
                                                                 >
-                                                                    Sửa
+                                                                    Reset password
                                                                 </button>
 
                                                                 <button type="button" className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
@@ -143,6 +150,7 @@ function ManageUser() {
                     renderOnZeroPageCount={null}
                 />
             </div>
+            {isShowModal && <Modal setIsShowModal={setIsShowModal} isDelete={isDelete} />}
         </div>
     );
 }
