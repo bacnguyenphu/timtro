@@ -7,6 +7,7 @@ import { getUsers } from "../../services/apiUser";
 import { blobToBase64 } from "../../utils/convertBase64";
 import ReactPaginate from "react-paginate";
 import Modal from "./Modal";
+import { useLocation, useNavigate } from "react-router-dom";
 moment.locale('vi');
 
 function ManageUser() {
@@ -16,36 +17,44 @@ function ManageUser() {
     const [totalPages, setTotalPages] = useState(0)
     const [isShowModal, setIsShowModal] = useState(false)
     const [isDelete, setIsDelete] = useState(false)
+    const navigate = useNavigate()
+    const location = useLocation()
     const limit = 10
 
 
-    const handleClickBtnDelete = () => {
+    const handleClickBtnDelete = (idPost) => {
         setIsShowModal(true)
         setIsDelete(true)
+
+        const currentParams = new URLSearchParams(location.search);
+        currentParams.set("id", idPost); // Thêm hoặc cập nhật param        
+        navigate(`${location.pathname}?${currentParams.toString()}`, { replace: true });
     }
 
-    const handleClickResetPass = () => {
+    const handleClickResetPass = (idPost) => {
         setIsShowModal(true)
         setIsDelete(false)
+
+        const currentParams = new URLSearchParams(location.search);
+        currentParams.set("id", idPost); // Thêm hoặc cập nhật param        
+        navigate(`${location.pathname}?${currentParams.toString()}`, { replace: true });
     }
 
     const handlePageClick = (event) => {
         setCurrentPage(event.selected + 1)
     }
 
-    useEffect(() => {
-        const fetchUsers = async () => {
-            const res = await getUsers(currentPage, limit)
-            if (res.err === 0) {
-                setUsers(res.data)
-                setTotalPages(res.totalPages)
-            }
+    const fetchUsers = async () => {
+        const res = await getUsers(currentPage, limit)
+        if (res.err === 0) {
+            setUsers(res.data)
+            setTotalPages(res.totalPages)
         }
+    }
+
+    useEffect(() => {
         fetchUsers()
     }, [currentPage])
-
-    console.log('check users: ', users);
-
 
     return (
         <div>
@@ -150,7 +159,7 @@ function ManageUser() {
                     renderOnZeroPageCount={null}
                 />
             </div>
-            {isShowModal && <Modal setIsShowModal={setIsShowModal} isDelete={isDelete} />}
+            {isShowModal && <Modal setIsShowModal={setIsShowModal} isDelete={isDelete} fetchUsers={fetchUsers} />}
         </div>
     );
 }

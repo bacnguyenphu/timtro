@@ -1,2 +1,7 @@
 export {default as SideBar} from './SideBar'
 export {default as ManageUser} from './ManageUser'
+export {default as ManageCategories} from './ManageCategories'
+export {default as Table} from './Table'
+export {default as ManagePrice} from './ManagePrice'
+export {default as ManageAcreage} from './ManageAcreage'
+export {default as ModalCategoryPriceAcreage} from './ModalCategoryPriceAcreage'

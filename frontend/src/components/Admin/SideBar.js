@@ -2,7 +2,7 @@ import { CiUser } from "react-icons/ci";
 import { IoFolderOpenOutline, IoPricetagOutline } from "react-icons/io5";
 import { PiSelectionForeground } from "react-icons/pi";
 import { TbCategoryMinus } from "react-icons/tb";
-import { ADMIN_MANAGE_ACREAGE, ADMIN_MANAGE_CATEGORIES, ADMIN_MANAGE_POSTS, ADMIN_MANAGE_USERS, LOGOUT } from "../../utils/paths";
+import { ADMIN_MANAGE_ACREAGE, ADMIN_MANAGE_CATEGORIES, ADMIN_MANAGE_POSTS, ADMIN_MANAGE_PRICE, ADMIN_MANAGE_USERS, LOGOUT } from "../../utils/paths";
 import { useSelector } from "react-redux";
 import imageAvatarDefault from '../../assets/images/user.png'
 import { NavLink } from "react-router-dom";
@@ -29,13 +29,13 @@ function SideBar() {
             path: ADMIN_MANAGE_CATEGORIES,
         },
         {
-            title: "Quản lí diện tích",
-            icon: <PiSelectionForeground size={'1.25rem'} />,
-            path: ADMIN_MANAGE_ACREAGE,
-        },
-        {
             title: "Quản lí khoảng giá",
             icon: <IoPricetagOutline size={'1.25rem'} />,
+            path: ADMIN_MANAGE_PRICE,
+        },
+        {
+            title: "Quản lí diện tích",
+            icon: <PiSelectionForeground size={'1.25rem'} />,
             path: ADMIN_MANAGE_ACREAGE,
         },
         {

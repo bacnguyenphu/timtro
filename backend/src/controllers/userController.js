@@ -28,7 +28,7 @@ const handleDeleteUser = async (req, res) => {
 
 const handleResetPassUser = async (req, res) => {
     try {
-        let idUser = req.query.idUser
+        let idUser = req.body.idUser
         const message = await resetPassUser(idUser)
         return res.status(200).json(message)
 

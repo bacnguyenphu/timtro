@@ -1,17 +1,42 @@
 import { useState } from "react";
 import { IoMdClose } from "react-icons/io";
+import { useLocation, useNavigate } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
+import { deleteUser, resetPassUser } from "../../services/apiUser";
+import { toast } from "react-toastify";
 
-function Modal({ setIsShowModal, isDelete }) {
+function Modal({ setIsShowModal, isDelete, fetchUsers }) {
 
     const [isLoad, setIsLoad] = useState(false)
+    const location = useLocation()
+    const navigate = useNavigate()
+    const param = new URLSearchParams(location.search)
+    const idUser = param.get('id')
 
-    const handleClickBtnDelete = () => {
+    console.log(idUser);
 
+
+    const handleClickBtnDelete = async() => {
+        const res = await deleteUser(idUser)
+        if(res.err!==0){
+            toast.error(res.mess)
+            setIsLoad(false)
+            return
+        }
+        toast.success(res.mess)
+        setIsShowModal(false)
+        await fetchUsers()
     }
 
-    const handleClickReset = () => {
-
+    const handleClickReset = async() => {
+        const res = await resetPassUser(idUser)
+        if(res.err!==0){
+            toast.error(res.mess)
+            setIsLoad(false)
+            return
+        }
+        toast.success(res.mess)
+        setIsShowModal(false)
     }
 
     return (
@@ -19,13 +44,19 @@ function Modal({ setIsShowModal, isDelete }) {
             onClick={(e) => {
                 if (e.target === e.currentTarget) {
                     setIsShowModal(false)
+                    navigate(location.pathname)
                 }
             }}
         >
             <div className="min-h-9 bg-white rounded-xl mx-auto mt-10 px-5 w-[600px]">
                 <div className="header flex items-center justify-between py-5 border-b">
                     <p className="text-2xl font-semibold">{isDelete ? "Xóa tài khoản" : "Reset password"}</p>
-                    <span className="cursor-pointer" onClick={() => { setIsShowModal(false) }}><IoMdClose size={'1.5rem'} /></span>
+                    <span className="cursor-pointer" onClick={() => {
+                        setIsShowModal(false)
+                        navigate(location.pathname)
+                    }}>
+                        <IoMdClose size={'1.5rem'} />
+                    </span>
                 </div>
                 <div>
                     {isDelete ?
@@ -34,7 +65,7 @@ function Modal({ setIsShowModal, isDelete }) {
                         </p>
                         :
                         <p className="text-lg py-5">
-                            Bạn có muốn reset mật khẩu của tài khoản này ?
+                            Bạn có muốn reset mật khẩu của tài khoản này về 123456 ?
                         </p>
                     }
                 </div>
@@ -54,7 +85,10 @@ function Modal({ setIsShowModal, isDelete }) {
                         </button>
                     }
                     <button className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-                        onClick={() => { setIsShowModal(false) }}
+                        onClick={() => {
+                            setIsShowModal(false)
+                            navigate(location.pathname)
+                        }}
                     >
                         Đóng
                     </button>
