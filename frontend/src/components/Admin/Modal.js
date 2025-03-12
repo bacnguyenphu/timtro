@@ -13,9 +13,6 @@ function Modal({ setIsShowModal, isDelete, fetchUsers }) {
     const param = new URLSearchParams(location.search)
     const idUser = param.get('id')
 
-    console.log(idUser);
-
-
     const handleClickBtnDelete = async() => {
         const res = await deleteUser(idUser)
         if(res.err!==0){
