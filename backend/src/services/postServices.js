@@ -1,6 +1,6 @@
 const db = require('../models/index')
 const { v4: uuidv4 } = require('uuid');
-const { Op, where } = require("sequelize");
+const { Op } = require("sequelize");
 
 const iditifyPrice = (value) => {
     let price = +value / 1000000.0

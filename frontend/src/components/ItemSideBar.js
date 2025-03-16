@@ -32,7 +32,7 @@ function ItemSideBar({ title, content, isCate, isArea }) {
                     }
                 </div>
                 :
-                <div className={`flex flex-wrap gap-x-4 gap-y-2 mt-3`}>
+                <div className={`flex flex-col gap-x-4 gap-y-2 mt-3`}>
                     {content && content.length > 0 &&
                         content.map(item => {
                             return (
@@ -50,7 +50,6 @@ function ItemSideBar({ title, content, isCate, isArea }) {
                     }
                 </div>
             }
-
         </div>
     );
 }

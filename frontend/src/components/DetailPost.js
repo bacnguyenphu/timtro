@@ -54,11 +54,10 @@ function DetailPost() {
     }
 
     const [previewImgs, setPreviewImgs] = useState([imageDefault])
-    console.log(previewImgs);
 
     const fetchPostByID = async () => {
         const res = await getPostByID(param?.idPost)
-        if (res.err == 0) {
+        if (res.err === 0) {
             if(JSON.parse(res.post?.images?.images).length>0){
                 setPreviewImgs([...JSON.parse(res.post?.images?.images)])
             }

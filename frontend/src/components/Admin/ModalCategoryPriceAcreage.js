@@ -6,6 +6,9 @@ import { toast } from 'react-toastify'
 import { useDispatch } from "react-redux";
 import { handleGetCategory } from "../../redux/categorySlice";
 import { useLocation, useNavigate } from "react-router-dom";
+import { iditify, isNumber } from "../../utils/identify";
+import { createPrice, deletePrice, updatePrice } from "../../services/apiPrice";
+import { handleGetPrice } from "../../redux/priceSlice";
 
 function ModalCategoryPriceAcreage({ setIsShowModal, type, isAdd, isDelete, isUpdate, categories, price, area }) {
 
@@ -58,7 +61,7 @@ function ModalCategoryPriceAcreage({ setIsShowModal, type, isAdd, isDelete, isUp
         }
     }
 
-    const handleClickAdd = () => {
+    const handleClickAdd = async () => {
         if (type === 'category') {
             setPayload(async (prev) => {
                 let temp = { ...prev, code: genderCode(prev.value) }
@@ -75,7 +78,35 @@ function ModalCategoryPriceAcreage({ setIsShowModal, type, isAdd, isDelete, isUp
             })
         }
 
+        if (type === 'price') {
+            if (payload.min === '') {
+                toast.info("Vui lòng không để trống min !")
+                setPayload({ ...payload, value: '' })
+                return
+            }
+            if ((!payload.max || payload.max === '') ? (!isNumber(+payload.min)) : (!isNumber(+payload.min) || !isNumber(+payload.max) || (+payload.min > +payload.max))) {
+                toast.info("Dữ liệu không hợp lệ !")
+                setPayload({ ...payload, value: '' })
+                return
+            }
+            setPayload({ ...payload, value: iditify(payload.min, payload.max) })
+            const data = { ...payload, value: iditify(payload.min, payload.max) }
+            const res = await createPrice(data)
+            console.log('check res:  ', res);
+            if (res.err !== 0) {
+                toast.error(res.mess)
+                return
+            }
+            else {
+                await dispatch(handleGetPrice())
+                toast.success(res.mess)
+                setIsShowModal(false)
+            }
+
+        }
     }
+
+    console.log('payload: ', payload);
 
     const handleClickDelete = async () => {
         if (type === 'category') {
@@ -88,12 +119,23 @@ function ModalCategoryPriceAcreage({ setIsShowModal, type, isAdd, isDelete, isUp
             await dispatch(handleGetCategory())
             setIsShowModal(false)
         }
+
+        if (type === "price") {
+            const res = await deletePrice(param.get("code"))
+            if (res.err !== 0) {
+                toast.error(res.mess)
+                return
+            }
+            toast.success(res.mess)
+            await dispatch(handleGetPrice())
+            setIsShowModal(false)
+        }
     }
 
     const handleClickUpdate = async () => {
-        if (type === 'category'){
+        if (type === 'category') {
             const res = await updateCategory(payload)
-            if(res.err!==0){
+            if (res.err !== 0) {
                 toast.error(res.mess)
                 return
             }
@@ -101,16 +143,47 @@ function ModalCategoryPriceAcreage({ setIsShowModal, type, isAdd, isDelete, isUp
             await dispatch(handleGetCategory())
             setIsShowModal(false)
         }
-    }
 
-    console.log('check payload: ',payload);
-    
+        if (type === "price") {
+            if (payload.min === '') {
+                toast.info("Vui lòng không để trống min !")
+                setPayload({ ...payload, value: '' })
+                return
+            }
+            if ((!payload.max || payload.max === '') ? (!isNumber(+payload.min)) : (!isNumber(+payload.min) || !isNumber(+payload.max) || (+payload.min > +payload.max))) {
+                toast.info("Dữ liệu không hợp lệ !")
+                setPayload({ ...payload, value: '' })
+                return
+            }
+            setPayload({ ...payload, value: iditify(payload.min, payload.max) })
+            const data = { ...payload, value: iditify(payload.min, payload.max) }
+            const res = await updatePrice(data)
+            console.log('check res:  ', res);
+            if (res.err !== 0) {
+                toast.error(res.mess)
+                return
+            }
+            else {
+                await dispatch(handleGetPrice())
+                toast.success(res.mess)
+                setIsShowModal(false)
+            }
+        }
+    }
 
     useEffect(() => {
         if (isUpdate) {
-            let tempCate = categories.find(cate => cate.code === param.get("code"))
-            setPayload({ ...tempCate })
+            if (type === "category") {
+                let temp = categories.find(item => item.code === param.get("code"))
+                setPayload({ ...temp })
+            }
+
+            if (type === "price") {
+                let temp = price.find(item => item.code === param.get("code"))
+                setPayload({ ...temp })
+            }
         }
+
     }, [param.get("code")])
 
     return (
@@ -159,6 +232,38 @@ function ModalCategoryPriceAcreage({ setIsShowModal, type, isAdd, isDelete, isUp
                 }
                 {type === 'category' && isDelete &&
                     <p>Bạn có muốn xoá danh mục này ?</p>
+                }
+                {type === 'price' && (isAdd || isUpdate) &&
+                    <div className="py-4 flex flex-col gap-4">
+                        <div className="flex gap-5">
+                            <div className="flex flex-col w-1/2">
+                                <label>Từ</label>
+                                <input className="outline-none p-1 border rounded" value={payload.min}
+                                    onChange={(e) => {
+                                        setPayload((prev) => ({ ...prev, min: e.target.value }))
+                                    }} />
+                                <small className="text-gray-500">Ít nhất là 0 đồng</small>
+                            </div>
+                            <div className="flex flex-col w-1/2">
+                                <label>Đến</label>
+                                <input className="outline-none p-1 border rounded" value={payload.max}
+                                    onChange={(e) => {
+                                        setPayload((prev) => ({ ...prev, max: e.target.value }))
+                                    }} />
+                                <small className="text-gray-500">Không có giới hạn thì để trống</small>
+                            </div>
+                        </div>
+                        <div className="flex flex-col">
+                            <label>Chi tiết</label>
+                            <input className="outline-none p-1 border w-2/3 rounded" value={payload.value} disabled
+                                onChange={(e) => {
+                                    setPayload((prev) => ({ ...prev, value: e.target.value }))
+                                }} />
+                        </div>
+                    </div>
+                }
+                {type === 'price' && isDelete &&
+                    <p>Bạn có muốn xoá khoảng giá này ?</p>
                 }
 
                 <div className="flex justify-end">
