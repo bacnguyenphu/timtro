@@ -6,9 +6,6 @@ function OverView({ payload, setPayload }) {
     const price = useSelector(state => state.price.price)
     const area = useSelector(state => state.area.area)
 
-    console.log('check area: ', area);
-
-
     const handleOnchangePriceAndAcreage = (e, type) => {
         if (type === "PRICE") {
             setPayload({ ...payload, price: e.target.value, priceCode: identifyPriceCodeAreaCode(e.target.value, "PRICE") })
@@ -23,28 +20,30 @@ function OverView({ payload, setPayload }) {
     const identifyPriceCodeAreaCode = (value, type) => {
         if (type === "PRICE") {
             if (price && price.length > 0) {
+                let code = ''
                 price.forEach(item => {
-                    if(item.max===null && value >= item.min){
-                        return item.code
+                    if (item.max === null && value >= item.min) {
+                        code = item.code
                     }
-                    if(value >=item.min && value <= item.max){
-                        return item.code
+                    if (value >= item.min && value <= item.max) {
+                        code = item.code
                     }
-                    
+
                 })
+                return code
             }
         }
 
-        if(type==="ACREAGE"){
-            if(area&& area.length>0){
+        if (type === "ACREAGE") {
+            if (area && area.length > 0) {
                 area.forEach(item => {
-                    if(item.max===null && value >= item.min){
+                    if (item.max === null && value >= item.min) {
                         return item.code
                     }
-                    if(value >=item.min && value <= item.max){
+                    if (value >= item.min && value <= item.max) {
                         return item.code
                     }
-                    
+
                 })
             }
         }
