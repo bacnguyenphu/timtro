@@ -36,15 +36,16 @@ function OverView({ payload, setPayload }) {
 
         if (type === "ACREAGE") {
             if (area && area.length > 0) {
+                let code = ''
                 area.forEach(item => {
                     if (item.max === null && value >= item.min) {
-                        return item.code
+                        code = item.code
                     }
                     if (value >= item.min && value <= item.max) {
-                        return item.code
+                        code = item.code
                     }
-
                 })
+                return code
             }
         }
 

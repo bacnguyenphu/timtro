@@ -8,7 +8,7 @@ const createPrice = (data) => {
 
     return axios.post('create-price', {
         value: data.value,
-        min: data.min,
+        min: `${data.min}`,
         max: data.max
     })
 }
@@ -18,7 +18,6 @@ const deletePrice = (code) => {
 }
 
 const updatePrice = (data) => {
-    console.log('check data: ',data);
     
     return axios.put('update-price',{
         value: data.value,

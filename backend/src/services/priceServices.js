@@ -1,4 +1,3 @@
-const { where } = require('sequelize')
 const db = require('../models/index')
 const { generateCode } = require('../utils/generateCode ')
 
@@ -96,6 +95,18 @@ const deletePrice = async (code) => {
             }
         }
 
+        const post = await db.Post.findOne({
+            where: { priceCode: code }
+        }
+        )
+
+        if (post) {
+            return {
+                err: 3,
+                mess: "Delete dosen't success because this price has posts"
+            }
+        }
+
         await db.Price.destroy({
             where: { code: code }
         })
@@ -167,7 +178,7 @@ const updatePrice = async (data) => {
 
         return {
             err: 0,
-            mess: 'Update category success !'
+            mess: 'Update price success !'
         }
 
     } catch (error) {

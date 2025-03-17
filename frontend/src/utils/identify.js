@@ -4,7 +4,6 @@ const formatNumber = (num) => {
 }
 
 export const iditify = (min, max) => {
-    console.log('min: ', min, "   max: ", max);
 
     let valueMin = +min / 1000000
     let valueMax = +max / 1000000
@@ -22,8 +21,19 @@ export const iditify = (min, max) => {
         return `Trên ${formatNumber(valueMin)} triệu`
     }
     else {
-
         return `Từ ${valueMin<1 ? +min/1000 + ' nghìn' : formatNumber(valueMin) + ' triệu'} - ${valueMax<1 ? +max/1000 + ' nghìn' : formatNumber(valueMax) + ' triệu'}`
+    }
+}
+
+export const identifyArea = (min,max)=>{
+    if (+min === 0) {
+        return `Dưới ${max}m2`
+    }
+    else if (max === null || max === '') {
+        return `Trên ${min}m2`
+    }
+    else {
+        return `Từ ${min}m2 - ${max}m2`
     }
 }
 
