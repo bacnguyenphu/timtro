@@ -8,16 +8,19 @@ import { IoCheckmark } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { onChangCurrentPage } from "../redux/currentPageSlice";
 
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 
-import { useNavigate, useParams,useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import _ from 'lodash'
+import AreaFilter from "./AreaFilter";
 
 function ModalFilterSearch({ setShowModalFilterSearch }) {
 
     const [categories, setCategories] = useState([])
     const [price, setPrice] = useState([])
     const [area, setArea] = useState([])
+    const [address,setAddress] = useState('')
+
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
@@ -30,8 +33,8 @@ function ModalFilterSearch({ setShowModalFilterSearch }) {
     const params = useParams()
     const [searchParams] = useSearchParams();
 
-    const priceQuery = searchParams.get("price") 
-    const areaQuery = searchParams.get("area") 
+    const priceQuery = searchParams.get("price")
+    const areaQuery = searchParams.get("area")
 
     const Getcategories = useSelector((state) => state.category.categories)
     const Getprice = useSelector(state => state.price.price)
@@ -47,7 +50,7 @@ function ModalFilterSearch({ setShowModalFilterSearch }) {
                 {
                     code: undefined,
                     value: "Tất cả",
-                    isSelected: _.isEmpty(params) ? true: false ,
+                    isSelected: _.isEmpty(params) ? true : false,
                     icon: <BsBorderAll />,
                 },
             ];
@@ -60,7 +63,7 @@ function ModalFilterSearch({ setShowModalFilterSearch }) {
                     icon: icons[index + 1] || null, // Sử dụng icon nếu tồn tại
                 };
 
-                if(params?.category===cate?.code){
+                if (params?.category === cate?.code) {
                     temp.isSelected = true
                 }
 
@@ -75,7 +78,7 @@ function ModalFilterSearch({ setShowModalFilterSearch }) {
                 {
                     code: undefined,
                     value: "Tất cả",
-                    isSelected: (!priceQuery || priceQuery==='undefined') ? true : false,
+                    isSelected: (!priceQuery || priceQuery === 'undefined') ? true : false,
                 },
             ];
 
@@ -86,7 +89,7 @@ function ModalFilterSearch({ setShowModalFilterSearch }) {
                     isSelected: false,
                 };
 
-                if(priceQuery===cate?.code){
+                if (priceQuery === cate?.code) {
                     temp.isSelected = true
                 }
 
@@ -101,7 +104,7 @@ function ModalFilterSearch({ setShowModalFilterSearch }) {
                 {
                     code: undefined,
                     value: "Tất cả",
-                    isSelected: (!areaQuery || areaQuery==='undefined') ? true : false,
+                    isSelected: (!areaQuery || areaQuery === 'undefined') ? true : false,
                 },
             ];
 
@@ -112,7 +115,7 @@ function ModalFilterSearch({ setShowModalFilterSearch }) {
                     isSelected: false,
                 };
 
-                if(areaQuery===cate?.code){
+                if (areaQuery === cate?.code) {
                     temp.isSelected = true
                 }
 
@@ -164,7 +167,7 @@ function ModalFilterSearch({ setShowModalFilterSearch }) {
     }
 
     const handleClickApply = () => {
-        
+
         if (!filterType.category) {
             // if(!filterType.price&&!filterType.area){
             //     return
@@ -173,8 +176,8 @@ function ModalFilterSearch({ setShowModalFilterSearch }) {
             setShowModalFilterSearch(false)
             dispatch(onChangCurrentPage(1))
         }
-        else{
-            if(!filterType.price&&!filterType.area){
+        else {
+            if (!filterType.price && !filterType.area) {
                 navigate(`/filter/${filterType.category}`)
                 setShowModalFilterSearch(false)
                 return
@@ -198,7 +201,7 @@ function ModalFilterSearch({ setShowModalFilterSearch }) {
                     <p className="text-2xl">Bộ lọc</p>
                     <span className="" onClick={() => { setShowModalFilterSearch(false) }}><IoMdClose size={'1.5rem'} /></span>
                 </div>
-                <div className="mt-5 h-[470px] overflow-y-auto">
+                <div className="my-5 h-[470px] overflow-y-auto">
                     <div>
                         <p>Danh mục cho thuê</p>
                         <div className="flex gap-3 mt-4 flex-wrap">
@@ -224,6 +227,13 @@ function ModalFilterSearch({ setShowModalFilterSearch }) {
                                     )
                                 })
                             }
+                        </div>
+                    </div>
+
+                    <div className="mt-10">
+                        <p>Khu vực</p>
+                        <div>
+                            <AreaFilter setAddress={setAddress} address={address}/>
                         </div>
                     </div>
 

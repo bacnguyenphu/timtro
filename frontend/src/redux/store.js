@@ -8,6 +8,7 @@ import currentPage from './currentPageSlice'
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import hardSet from 'redux-persist/lib/stateReconciler/hardSet'
+import poster from './posterSlice'
 
 const authUserConfig = {
     key: 'authUser',
@@ -22,7 +23,8 @@ export const store = configureStore({
         price: price,
         area: area,
         postsIsLiked: postsIsLiked,
-        currentPage: currentPage
+        currentPage: currentPage,
+        poster: poster,
     },
 })
 

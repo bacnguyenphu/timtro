@@ -44,7 +44,7 @@ const getPosts = async () => {
     }
 }
 
-const getPostsByPaginate = async (page, limit, category, price, area, isNewPost) => {
+const getPostsByPaginate = async (page, limit, category, price, area, isNewPost, address) => {
     try {
         let whereCondition = {}
 
@@ -67,6 +67,10 @@ const getPostsByPaginate = async (page, limit, category, price, area, isNewPost)
 
         if (area) {
             whereCondition.areaCode = area
+        }
+
+        if (address) {
+            whereCondition.address = { [Op.like]: `%${address}%` }
         }
 
         const { count, rows } = await db.Post.findAndCountAll({
@@ -118,7 +122,7 @@ const getPostByID = async (idPost) => {
             include: [
                 { model: db.Attribute, as: 'attribute', attributes: ['price', 'acreage', 'published', 'id'], },
                 { model: db.Image, as: 'images', attributes: ['images', 'id'] },
-                { model: db.User, as: 'user', attributes: ['name', 'phone', 'avatar'] },
+                { model: db.User, as: 'user', attributes: ['name', 'phone', 'avatar', 'zalo'] },
             ],
         })
 
@@ -206,7 +210,7 @@ const getPostsByIDUser = async (page, limit, idUser) => {
 
             order: [
                 ['createdAt', 'DESC']
-            ] ,
+            ],
 
             offset: (page - 1) * limit,
             limit: limit,
@@ -454,7 +458,7 @@ const getPostLikedOfUser = async (idUser) => {
     }
 }
 
-const getPostsLiked = async (listId,page,limit) => {
+const getPostsLiked = async (listId, page, limit) => {
     try {
         if (!listId) {
             return {
@@ -477,7 +481,7 @@ const getPostsLiked = async (listId,page,limit) => {
             },
             order: [
                 ['createdAt', 'DESC']
-            ] ,
+            ],
 
             offset: (page - 1) * limit,
             limit: limit,

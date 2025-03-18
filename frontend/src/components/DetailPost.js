@@ -14,11 +14,16 @@ import imageDefault from '../assets/images/imageDefault.svg'
 import moment from 'moment';
 import 'moment/locale/vi';
 import { scrollToTop } from "../utils/sctrolltop";
+
+import { useDispatch } from "react-redux";
+import { poster } from "../redux/posterSlice";
 moment.locale('vi');
+
 
 function DetailPost() {
 
     const param = useParams()
+    const dispatch = useDispatch()
     const [post, setPost] = useState({})
 
     function SampleNextArrow(props) {
@@ -58,13 +63,14 @@ function DetailPost() {
     const fetchPostByID = async () => {
         const res = await getPostByID(param?.idPost)
         if (res.err === 0) {
-            if(JSON.parse(res.post?.images?.images).length>0){
+            if (JSON.parse(res.post?.images?.images).length > 0) {
                 setPreviewImgs([...JSON.parse(res.post?.images?.images)])
             }
-            else{
+            else {
                 setPreviewImgs([imageDefault])
             }
             setPost(res.post)
+            dispatch(poster(res.post.user))
         }
     }
 
@@ -129,7 +135,7 @@ function DetailPost() {
                                         Liên hệ
                                     </th>
                                     <td className="px-6 py-4">
-                                    {post?.user?.name}
+                                        {post?.user?.name}
                                     </td>
                                 </tr>
                                 <tr className="odd:bg-white even:bg-gray-50 border-b border-gray-200">
@@ -145,7 +151,7 @@ function DetailPost() {
                                         Zalo
                                     </th>
                                     <td className="px-6 py-4">
-                                    {post?.user?.zalo}
+                                        {post?.user?.zalo}
                                     </td>
                                 </tr>
                             </tbody>

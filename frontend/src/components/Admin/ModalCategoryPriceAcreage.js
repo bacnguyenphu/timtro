@@ -120,7 +120,6 @@ function ModalCategoryPriceAcreage({ setIsShowModal, type, isAdd, isDelete, isUp
             setPayload({ ...payload, value: identifyArea(payload.min, payload.max) })
             let data = { ...payload, value: identifyArea(payload.min, payload.max) }
             const res = await createArea(data)
-            console.log('check res: ', res);
             if (res.err !== 0) {
                 toast.error(res.mess)
                 return
@@ -133,8 +132,6 @@ function ModalCategoryPriceAcreage({ setIsShowModal, type, isAdd, isDelete, isUp
 
         }
     }
-
-    console.log('payload: ', payload);
 
     const handleClickDelete = async () => {
         if (type === 'category') {
@@ -197,7 +194,6 @@ function ModalCategoryPriceAcreage({ setIsShowModal, type, isAdd, isDelete, isUp
             setPayload({ ...payload, value: iditify(payload.min, payload.max) })
             const data = { ...payload, value: iditify(payload.min, payload.max) }
             const res = await updatePrice(data)
-            console.log('check res:  ', res);
             if (res.err !== 0) {
                 toast.error(res.mess)
                 return
@@ -403,7 +399,6 @@ function ModalCategoryPriceAcreage({ setIsShowModal, type, isAdd, isDelete, isUp
                     </button>
                 </div>
             </div>
-
         </div>
     );
 }

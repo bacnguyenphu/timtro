@@ -30,7 +30,8 @@ const handleGetPostsByPaginate = async (req, res) => {
         let price = req.query.price
         let area = req.query.area
         let isNewPost = req.query.isNewPost
-        const messasge = await getPostsByPaginate(+page, +limit, category, price, area, isNewPost)
+        let address = req.query.address
+        const messasge = await getPostsByPaginate(+page, +limit, category, price, area, isNewPost,address)
         return res.status(200).json(messasge)
     } catch (error) {
         console.log("Lỗi ở handleGetpostByPaginate", error);
