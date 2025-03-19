@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router";
 import { ADMIN_MANAGE_ACREAGE, ADMIN_MANAGE_CATEGORIES, ADMIN_MANAGE_POSTS, ADMIN_MANAGE_PRICE, ADMIN_MANAGE_USERS, HOMEPAGE, LOGIN, LOGOUT, POST_LIKED, REGISTER, USER_MANAGE_POSTS, USER_POST_NEW, USER_PROFILE } from "./utils/paths";
 import { LayoutAdmin, LayoutDefault, LayoutUserManage } from "./layouts";
-import { Login, HomePage, Register, ListFilter, Logout, DetailPost, PostLiked, ManagePost } from "./components";
+import { Login, HomePage, Register, ListFilter, Logout, DetailPost, PostLiked, ManagePost, CheckLogin } from "./components";
 import { ToastContainer } from 'react-toastify';
 import { ManageAccout, PostNew } from "./components/UserManage";
 import { ManageAcreage, ManageCategories, ManagePrice, ManageUser } from "./components/Admin";
@@ -10,7 +10,6 @@ function App() {
   return (
     <>
       <Routes>
-
         <Route path={HOMEPAGE} element={<LayoutDefault />}>
           <Route index element={<HomePage />} />
           <Route path="/filter">
@@ -18,7 +17,7 @@ function App() {
               <Route path=":idPost" element={<DetailPost />} />
             </Route>
           </Route>
-          <Route path={LOGIN} element={<Login />} />
+          <Route path={LOGIN} element={<CheckLogin><Login /></CheckLogin>} />
           <Route path={REGISTER} element={<Register />} />
           <Route path={LOGOUT} element={<Logout><Login /></Logout>} />
           <Route path={POST_LIKED} element={<PostLiked />} />

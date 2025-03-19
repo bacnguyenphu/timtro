@@ -8,8 +8,8 @@ const getPostByID = (idPost) => {
     return axios.get('get-post-by-id', { params: { idPost } })
 }
 
-const getPostByPaginate = (page, limit, category, price, area, isNewPost) => {
-    return axios.get('getPostByPaginate', { params: { page, limit, category, price, area, isNewPost } })
+const getPostByPaginate = (page, limit, category, price, area, isNewPost, address) => {
+    return axios.get('getPostByPaginate', { params: { page, limit, category, price, area, isNewPost, address } })
 }
 
 const createNewPost = data => {
@@ -36,9 +36,9 @@ const likeAndDislikePostByUser = (idPost, idUser) => {
     return axios.post('like-dislike-post-by-user', { idPost, idUser })
 }
 
-const getPostsLiked = (listId,page,limit) => {
-    
-    return axios.get('get-post-liked', { params: { listId,page,limit } })
+const getPostsLiked = (listId, page, limit) => {
+
+    return axios.get('get-post-liked', { params: { listId, page, limit } })
 }
 
 export {

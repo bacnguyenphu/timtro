@@ -87,7 +87,7 @@ function ManagePost({ type }) {
                 <HeaderTitle title={'Danh sách tin đăng'} navs={navs} />
             </div>
             <div className="pt-28">
-                <div className="flex flex-col">
+                {posts.length>0&&<div className="flex flex-col">
                     <div className="sm:mx-0.5 lg:mx-0.5">
                         <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8">
                             <div className="overflow-hidden">
@@ -159,7 +159,9 @@ function ManagePost({ type }) {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>}
+                {posts.length===0&&
+                    <p className='ml-14'>Không có bài đăng</p>}
             </div>
 
             <div className="peage">

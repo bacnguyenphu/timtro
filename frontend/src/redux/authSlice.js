@@ -36,7 +36,7 @@ export const login = createAsyncThunk("AuthenUser/login", async (payload) => {
             isAuthenticate: true,
             token: res.token,
             name: res.name,
-            avatar: blobToBase64(res.avatar),
+            avatar: !res.avatar ? null : blobToBase64(res?.avatar),
             phone: res.phone,
             id: res.id,
             zalo: res.zalo,
@@ -72,14 +72,16 @@ export const authSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(login.fulfilled, (state, action) => {
+                console.log('check action: ', action);
+
                 state.isAuthenticate = action.payload.isAuthenticate
-                state.name = action.payload.name
-                state.token = action.payload.token
-                state.phone = action.payload.phone
-                state.id = action.payload.id
-                state.zalo = action.payload.zalo
-                state.avatar = action.payload.avatar
-                state.role = action.payload.role
+                state.name = action.payload?.name
+                state.token = action.payload?.token
+                state.phone = action.payload?.phone
+                state.id = action.payload?.id
+                state.zalo = action.payload?.zalo
+                state.avatar = action.payload?.avatar
+                state.role = action.payload?.role
             })
     }
 })

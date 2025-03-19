@@ -47,6 +47,8 @@ const getPosts = async () => {
 const getPostsByPaginate = async (page, limit, category, price, area, isNewPost, address) => {
     try {
         let whereCondition = {}
+        console.log('check address1: ',address);
+        
 
         if (!page && !limit) {
             return {

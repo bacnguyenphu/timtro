@@ -8,7 +8,7 @@ import { IoCheckmark } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { onChangCurrentPage } from "../redux/currentPageSlice";
 
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import _ from 'lodash'
@@ -172,17 +172,17 @@ function ModalFilterSearch({ setShowModalFilterSearch }) {
             // if(!filterType.price&&!filterType.area){
             //     return
             // }
-            navigate(`/?price=${filterType.price}&area=${filterType.area}`)
+            navigate(`/?price=${filterType.price}&area=${filterType.area}`,{ state: address })
             setShowModalFilterSearch(false)
             dispatch(onChangCurrentPage(1))
         }
         else {
             if (!filterType.price && !filterType.area) {
-                navigate(`/filter/${filterType.category}`)
+                navigate(`/filter/${filterType.category}`,{ state: address })
                 setShowModalFilterSearch(false)
                 return
             }
-            navigate(`/filter/${filterType.category}?price=${filterType.price}&area=${filterType.area}`)
+            navigate(`/filter/${filterType.category}?price=${filterType.price}&area=${filterType.area}`,{ state: address })
             setShowModalFilterSearch(false)
             dispatch(onChangCurrentPage(1))
         }
